@@ -1,0 +1,7 @@
+---
+#this will start the containers in the docker-compose start fashion
+
+- name: Running docker-compose up 
+  community.docker.docker_compose:
+    project_src: "{{migrid_root}}"
+    build: false

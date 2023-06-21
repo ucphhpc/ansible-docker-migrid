@@ -1,0 +1,20 @@
+---
+
+# Start migrid
+# and also start and mount encrypted drive
+# ansible-playbook --ask-vault-pass -i inventory.yml -l host -u ansib start-migrid.yml
+# using a server without encrypted drive:
+# ansible-playbook -i inventory.yml -l host -u ansib start-migrid.yml
+
+
+- name: "Start migrid"
+  hosts:
+    - all
+  gather_facts: yes
+  become: yes
+  roles:
+    - setup-vars
+    - startup-encrypt-state
+    - start-promtail
+    - start-containers
+    

@@ -1,0 +1,80 @@
+# promtail configuration
+# NOTE: indents has to be correct or else...
+server:
+  http_listen_port: 3102
+  http_listen_address: {{ ansible_facts[promtail_loki_net]['ipv4']['address']}}
+  grpc_listen_address: localhost
+  grpc_listen_port: 9095
+
+clients:
+  - url: http://{{promtail_loki_server}}:3100/loki/api/v1/push
+    backoff_config:
+      min_period: 500ms
+      max_period: 5m
+      max_retries: 8888
+    
+  
+
+limits_config:
+  readline_rate_enabled: true
+  readline_rate_drop: false
+  #max_streams: 3
+  readline_rate: 8888
+  readline_burst: 8888
+  max_line_size: 8kb
+  max_line_size_truncate: true 
+
+#   external_labels:
+#     migrid: erda
+
+positions:
+  filename: /var/log/promtail/promtail_positions.yaml
+
+scrape_configs:
+  - job_name: erda
+    static_configs:
+    - labels:
+        job: erdalogs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
+        host: {{ansible_hostname}} # A `host` label will help identify logs from this machine vs others
+        __path__: {{migrid_state_directory}}/log/*.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
+    pipeline_stages:
+    - match:
+        selector: '{job="erdalogs"}'
+        stages:
+          - regex:
+              source: filename
+              expression: '{{migrid_state_directory}}/log/(?P<service>\S+?).log'
+          - labels:
+              service:
+    - match:
+        selector: '{job="erdalogs", service!="mig"}'
+        stages:
+          - regex:
+              expression: '^(?P<timestamp>\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}[\.,]\d{3}) (?P<logType>[A-Za-z]+)'
+          - labels:
+              logType:
+          - template:
+              source: timestamp
+              template: '{{'{{ Replace .Value "," "." 1 }}'}}'
+          - template:
+              source: timestamp
+              template: '{{'{{ Replace .Value " " "T" 1 }}'}}{{promtail_ts_a}}'
+          - timestamp:
+              format: RFC3339Nano
+              source: timestamp
+    - match:
+        selector: '{job="erdalogs", service="mig"}'
+        stages:
+          - regex:
+              expression: '^(?P<timestamp>\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}[\.,]\d{3}) (?P<logType>[A-Za-z]+)'
+          - labels:
+              logType:
+          - template:
+              source: timestamp
+              template: '{{'{{ Replace .Value "," "." 1 }}'}}'
+          - template:
+              source: timestamp
+              template: '{{'{{ Replace .Value " " "T" 1 }}'}}{{promtail_ts_b}}'
+          - timestamp:
+              format: RFC3339Nano
+              source: timestamp

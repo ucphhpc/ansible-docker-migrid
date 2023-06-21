@@ -1,0 +1,40 @@
+---
+# builds that status.html file that shows the deployed versions
+
+- name: get git tag
+  delegate_to: localhost
+  become: false
+  shell:
+    #cmd: "git name-rev --tags --name-only $(git rev-parse HEAD)"
+    cmd: "git tag | tail -1"
+    chdir: "~/git/migrid/"
+  register: result
+
+- name: register tag
+  set_fact:
+    deploy_version: "{{ { 'deploy_version' : result.stdout } }}"
+
+- name: get deployed migrid version
+  shell:
+    cmd: "grep ^MIG_GIT_REV {{migrid_root}}/.env"
+  register: result
+
+- name: register deployed migrid version
+  set_fact:
+    migrid_git_rev: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+
+- name: get deployed svn version
+  shell:
+    cmd: "grep ^MIG_SVN_REV {{migrid_root}}/.env"
+  register: result
+
+- name: register deployed svn version
+  set_fact:
+    migrid_git_svn: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+
+- name: update status.html
+  copy:
+    content: "{{ deploy_version | combine(migrid_git_rev)|combine(migrid_git_svn ) |to_json }}"
+    dest: "{{migrid_state_directory}}/wwwpublic/status.html"
+    owner: "{{migrid_user}}"
+    group: "{{migrid_user}}"

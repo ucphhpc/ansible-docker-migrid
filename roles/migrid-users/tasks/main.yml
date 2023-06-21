@@ -1,0 +1,31 @@
+---
+# setup users used on our migrid platform.
+- name: "Create {{ migrid_adm }} group"
+  group:
+    name: "{{ migrid_adm }}"
+    gid: 1010
+    state: present
+
+- name: "Create {{ migrid_adm }} user"
+  user:
+    name: "{{ migrid_adm }}"
+    comment: "MiGrid User"
+    group: "{{ migrid_adm }}"
+    shell: /bin/bash
+    uid: 1010
+    password_lock: true
+
+- name: "Create {{ migrid_user }} group"
+  group:
+    name: "{{ migrid_user }}"
+    gid: "{{migrid_gid}}"
+    state: present
+
+- name: "Create {{ migrid_user }} user"
+  user:
+    name: "{{ migrid_user }}"
+    comment: "MiGrid User"
+    group: "{{ migrid_user }}"
+    shell: /bin/bash
+    uid: "{{migrid_uid}}"
+    password_lock: true

@@ -1,0 +1,58 @@
+---
+# deals with creating dirs for mounting lustre
+# depends on migrid-baseline
+- name: Copy lnet.conf to modprobe.d
+  copy:
+    src: lnet.conf
+    dest: /etc/modprobe.d/
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+#FIXME: the strings in migrid_lustre_mount.dest should match up with migrid_lustre_mount_point
+
+- name: "Create directories for lustre mount points"
+  file:
+    path: "/mnt/{{item.dest}}"
+    owner: "root"
+    group: "root"
+    state: "directory"
+    mode: '0755'
+  loop: "{{ migrid_lustre_mount| selectattr('dest', 'match', migrid_base_type)|list }}"
+
+# this will select the drive to be mounted based on the variable migrid_lustre_mount_point
+# it will only mount the one specified in migrid_lustre_mount_point so it cannot mount both 
+# sites at the same time
+- name: Mount Lustre directory
+  mount:
+    path: "/mnt/{{item.dest}}"
+    src: "{{item.src}}"
+    opts: "flock"
+    fstype: "lustre"
+    state: mounted
+  loop: "{{ migrid_lustre_mount| selectattr('dest', 'match', migrid_lustre_mount_point)|list }}"
+
+- name: "Create dir {{migrid_state_directory}}"
+  file:
+    path: "{{migrid_state_directory}}"
+    owner: "{{migrid_user}}"
+    group: "{{migrid_user}}"
+    state: "directory"
+    mode: '0755'
+
+- name: "Create {{migrid_cipher_directory}} when using encryption"
+  file:
+    path: "{{migrid_cipher_directory}}"
+    owner: "{{migrid_user}}"
+    group: "{{migrid_user}}"
+    state: "directory"
+    mode: '0755'
+  when: migrid_encrypt_state==true
+
+# non encryption stuff
+- name: Create shortcut link
+  file:
+    src: "{{migrid_state_directory}}"
+    dest: "{{migrid_root}}/lustate"
+    state: link
+  when: migrid_encrypt_state==false

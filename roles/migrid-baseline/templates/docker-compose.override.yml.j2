@@ -1,0 +1,38 @@
+# au rendered version of docker-compose.override 
+# This is managed by ansible, do not edit!
+version: '3.7'
+services:
+  migrid:
+    volumes:
+      - ../au-overlay/{{ansible_hostname}}/skin/{{migrid_base_type}}-ucph-science:/home/mig/mig/images/skin/{{migrid_base_type}}-ucph-science:ro
+      - ../au-overlay/{{ansible_hostname}}/skin/icons:/home/mig/mig/images/icons:ro
+      - type: volume
+        source: state
+        target: /home/mig/state
+  migrid-sftp:
+    volumes:
+      - type: volume
+        source: state
+        target: /home/mig/state
+  migrid-ftps:
+    volumes:
+      - type: volume
+        source: state
+        target: /home/mig/state
+  migrid-webdavs:
+    volumes:
+      - type: volume
+        source: state
+        target: /home/mig/state
+  migrid-openid:
+    volumes:
+      - type: volume
+        source: state
+        target: /home/mig/state
+volumes:
+  state:
+    driver: local
+    driver_opts:
+      type: none
+      device: {{migrid_state_directory}}
+      o: bind

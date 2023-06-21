@@ -1,0 +1,39 @@
+---
+
+# mounting and setup normal usage for encrypted drive
+# depends on setup-encrypt-state
+
+- name: "Create directory for decrypted mount point"
+  file:
+    path: "{{ migrid_state_directory }}"
+    owner: "{{migrid_user}}"
+    group: "{{migrid_user}}"
+    state: "directory"
+
+- name: Copy pfile
+  template:
+    src: pfile.j2
+    dest: "{{migrid_root}}/p__file"
+    owner: "{{migrid_user}}"
+    group: "{{migrid_user}}"
+
+- name: Mount with gocrypt
+  shell:
+    cmd:  "su -c '/usr/bin/gocryptfs -passfile {{migrid_root}}/p__file -allow_other {{migrid_cipher_directory}} {{migrid_state_directory}}/' mig"
+  register: results
+  ignore_errors: true 
+
+- name: Remove pfile
+  file:
+    path: "{{migrid_root}}/p__file"
+    state: absent
+
+- name: print results
+  debug:
+    msg: "{{results}}"
+  when: results.failed==true
+
+- name: Check if it failed
+  fail:
+    msg: "Mounting with gocryptfs failed"
+  when: results.failed==true

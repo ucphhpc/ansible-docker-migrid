@@ -1,0 +1,37 @@
+---
+
+# depends on migrid-baseline is runned before this
+
+- name: Ensure that user_allow_other is set in fuse.conf
+  lineinfile:
+    path: /etc/fuse.conf
+    regexp: "^user_allow_other"
+    line: "user_allow_other"
+
+- name: Copy pfile
+  template:
+    src: pfile.j2
+    dest: "{{migrid_root}}/p__file"
+    owner: "{{migrid_user}}"
+    group: "{{migrid_user}}"
+
+- name: Create cryptfs
+  shell:
+    cmd:  "su -c '/usr/bin/gocryptfs -passfile {{migrid_root}}/p__file -init {{migrid_cipher_directory}}' mig"
+  register: results
+  ignore_errors: true 
+
+- name: Remove pfile
+  file:
+    path: "{{migrid_root}}/p__file"
+    state: absent
+
+- name: print results
+  debug:
+    msg: "{{results}}"
+  when: results.failed==true
+
+- name: Check if it failed
+  fail:
+    msg: "Creating gocryptfs failed"
+  when: results.failed==true

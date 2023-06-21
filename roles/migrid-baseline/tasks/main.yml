@@ -1,0 +1,62 @@
+#this will do that baseline stuff needed for doing migrid on the server
+# depends on migrid-users
+---
+
+- name: "Create directory for MiGrid"
+  file:
+    path: "{{ migrid_root }}"
+    owner: "{{migrid_adm}}"
+    group: "{{migrid_adm}}"
+    state: "directory"
+
+- name: "Set safe.directory for {{migrid_root}}"
+  command:
+    cmd: "git config --global --add safe.directory {{migrid_root}}"
+    chdir: "{{migrid_root}}"
+
+- name: Get infos on container
+  community.docker.docker_container_info:
+    name: migrid
+  register: result
+
+- name: Check if containers are running
+  fail:
+    msg: "MiGrid is runing, cannot continue!"
+  when: result.exists
+
+- name: Clone docker-migrid
+  git:
+    repo: "{{migrid_repository}}"
+    dest: "{{migrid_root}}"
+
+- name: Changer owner on all files
+  file:
+    path: "{{migrid_root}}"
+    owner: "{{migrid_adm}}"
+    group: "{{migrid_adm}}"
+    recurse: true
+
+- name: Set .env
+  file:
+    src: "{{migrid_auoverlay}}/{{ansible_hostname}}/env"
+    dest: "{{migrid_root}}/.env"
+    state: link
+
+- name: Set Dockerfile
+  file:
+    src: "{{migrid_root}}/Dockerfile.{{migrid_container_type}}"
+    dest: "{{migrid_root}}/Dockerfile"
+    state: link
+
+- name: Set docker-compose.override.yml
+  template:
+    src: docker-compose.override.yml.j2
+    dest: "{{migrid_root}}/docker-compose.override.yml"
+    owner: "{{migrid_adm}}"
+    group: "{{migrid_adm}}"
+
+- name: Set docker-compose.yml
+  file:
+    src: "{{migrid_root}}/docker-compose_dev.erda.dk_full.yml"
+    dest: "{{migrid_root}}/docker-compose.yml"
+    state: link

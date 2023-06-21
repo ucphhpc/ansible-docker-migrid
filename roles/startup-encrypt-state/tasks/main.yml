@@ -1,0 +1,13 @@
+---
+#decides if this server has a encrypted drive that needs to be mounted
+- name: Check if already mounted
+  command:
+    cmd: "mountpoint {{migrid_state_directory}}"
+  failed_when: false
+  register: already_mounted
+  when: migrid_encrypt_state==true
+
+- name: Import encryption task if needed
+  import_tasks:
+    file: encrypt.yml
+  when: migrid_encrypt_state==true and already_mounted.rc!=0

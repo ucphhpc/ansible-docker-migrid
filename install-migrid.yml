@@ -1,0 +1,25 @@
+#this will prepare MiGrid for being able to run on this server. Setting up environment and fetching stuff, and linking stuff.
+#ansible-playbook --ask-vault-pass -i inventory.yml -l host -u ansib install-migrid.yml
+---
+
+- name: deploy certificates from vault
+  hosts: 
+    - all
+  vars:
+    migrid_cleanup: true
+  gather_facts: yes
+  become: yes
+  roles:
+    - setup-vars
+    - migrid-pre-check
+    - stop-promtail
+    - umount-encrypt-state
+    - migrid-logrotate
+    - migrid-clean
+    - migrid-users
+    - copy-overlay-files
+    - migrid-baseline
+    - copy-cert-files
+    - connect-lustre
+    - setup-encrypt-state
+    - startup-encrypt-state

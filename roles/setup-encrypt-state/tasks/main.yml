@@ -1,0 +1,17 @@
+---
+# decide if this server has to have an encrypted drive
+- name: Check if gocryptfs.conf already exists on encryption drive
+  stat:
+    path: "{{migrid_cipher_directory}}/gocryptfs.conf"
+  register: st
+  when: migrid_encrypt_state==true
+
+- name: check result
+  debug:
+    msg: "{{migrid_cipher_directory}}/gocryptfs.conf exist skipping create fs"
+  when: migrid_encrypt_state==true and st.stat.exists==true
+
+- name: Import encryption task if needed
+  import_tasks:
+    file: encrypt.yml
+  when: migrid_encrypt_state==true and st.stat.exists==false

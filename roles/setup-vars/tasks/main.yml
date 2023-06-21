@@ -1,0 +1,28 @@
+---
+# this should be run first
+#This is used for rendering variables for directory structure used to point to state directory
+#This has to be renderend or stuff will fail
+
+
+- name: Setup state directory pointer for non encryption
+  set_fact:
+    migrid_state_directory: "/mnt/{{migrid_lustre_mount_point}}/{{ansible_hostname}}"
+  when: migrid_encrypt_state==false
+
+- name: Setup state directory pointer for encryption
+  set_fact:
+    migrid_state_directory: "{{migrid_root}}/{{migrid_decrypt_dir}}"
+  when: migrid_encrypt_state==true
+
+- name: Set cipher directory for goencrypt
+  set_fact:
+    migrid_cipher_directory: "/mnt/{{migrid_lustre_mount_point}}/{{ansible_hostname}}"
+  when: migrid_encrypt_state==true
+
+# - name: debug
+#   debug:
+#     msg:  "migrid state dir now {{migrid_state_directory}}"
+
+# - name: debug2
+#   debug:
+#     msg: "migrid cipher dir {{migrid_cipher_directory}}"

@@ -1,0 +1,23 @@
+#clean up directories before doing anything is a good thing.. aah the fresh smell of clean :) 
+---
+
+- name: Prune everyting in docker
+  community.docker.docker_prune:
+    containers: true
+    images: true
+    images_filters:
+      dangling: false
+    networks: true
+    volumes: true
+    builder_cache: true
+  when: migrid_cleanup == true
+
+- name: "Remove {{migrid_auoverlay}}"
+  file:
+    path: "{{migrid_auoverlay}}"
+    state: absent
+
+- name: "Remove {{ migrid_root }}"
+  file:
+    path: "{{migrid_root}}"
+    state: absent

@@ -1,0 +1,25 @@
+---
+
+- name: "Install needed packages"
+  apt:
+    name: "logrotate"
+    state: "present"
+    update_cache: yes
+
+- name: Copy migrid logrotate file
+  template:
+    src: migridlog.j2
+    dest: /etc/logrotate.d/migridlog
+  notify: restart-logrotate
+
+- name: Copy lustre_exporter logrotate file
+  template:
+    src: lustre_exporter.j2
+    dest: /etc/logrotate.d/lustre_exporter
+  notify: restart-logrotate
+
+- name: Enable logrotate
+  systemd:
+    name: logrotate
+    enabled: yes
+    state: started

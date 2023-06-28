@@ -4,12 +4,12 @@
 - name: Get infos on container
   community.docker.docker_container_info:
     name: migrid
-  register: result
+  register: migrid_container
 
-- name: Check if containers are running
+- name: Check if migrid container exists
   fail:
-    msg: MiGrid is runing, cannot continue!
-  when: result.exists
+    msg: MiGrid container already exists, cannot continue!
+  when: migrid_container.exists
 
 - name: find files in state
   find:

@@ -13,7 +13,7 @@
   gather_facts: yes
   become: yes
   roles:
-    - setup-vars
-    - copy-static-files
-    - update-status-html
-    - promtail-migrid
+    - setup_vars
+    - copy_static_files
+    - update_status_html
+    - promtail_migrid

@@ -10,16 +10,16 @@
   gather_facts: yes
   become: yes
   roles:
-    - setup-vars
-    - migrid-pre-check
-    - stop-promtail
-    - umount-encrypt-state
-    - migrid-logrotate
-    - migrid-clean
-    - migrid-users
-    - copy-overlay-files
-    - migrid-baseline
-    - copy-cert-files
-    - connect-lustre
-    - setup-encrypt-state
-    - startup-encrypt-state
+    - setup_vars
+    - migrid_pre_check
+    - stop_promtail
+    - umount_encrypt_state
+    - migrid_logrotate
+    - migrid_clean
+    - migrid_users
+    - copy_overlay_files
+    - migrid_baseline
+    - copy_cert_files
+    - connect_lustre
+    - setup_encrypt_state
+    - startup_encrypt_state

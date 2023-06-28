@@ -13,8 +13,7 @@
   gather_facts: yes
   become: yes
   roles:
-    - setup-vars
-    - startup-encrypt-state
-    - start-promtail
-    - start-containers
-    
+    - setup_vars
+    - startup_encrypt_state
+    - start_promtail
+    - start_containers

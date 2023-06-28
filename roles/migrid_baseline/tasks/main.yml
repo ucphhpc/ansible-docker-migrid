@@ -37,7 +37,7 @@
 
 - name: Set .env
   file:
-    src: "{{migrid_auoverlay}}/{{ansible_hostname}}/env"
+    src: "{{migrid_au_overlay}}/{{ansible_hostname}}/env"
     dest: "{{migrid_root}}/.env"
     state: link
 

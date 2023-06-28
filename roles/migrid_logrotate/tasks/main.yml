@@ -1,9 +1,16 @@
 ---
-- name: Install needed packages
+- name: Install needed packages (Debian)
   apt:
     name: logrotate
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install needed packages (RedHat)
+  yum:
+    name: logrotate
+    state: present
+  when: ansible_os_family == "RedHat"
 
 - name: Copy migrid logrotate file
   template:
@@ -17,8 +24,18 @@
     dest: /etc/logrotate.d/lustre_exporter
   notify: restart-logrotate
 
-- name: Enable logrotate
+- name: Enable logrotate (Debian)
   systemd:
     name: logrotate
     enabled: true
     state: started
+  when: ansible_os_family == "Debian"
+
+- name: Enable logrotate (Redhat)
+  cron:
+    name: mirgid-logrotate
+    user: root
+    minute: "10"
+    hour: "4"
+    job: logrotate -f /etc/logrotate.conf
+  when: ansible_os_family == "RedHat"

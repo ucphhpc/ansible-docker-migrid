@@ -1,34 +1,32 @@
+---
 #copy static files into www services
 #build containers, setup the rest for deployment
 # depends on migrid-baseline, startup-encrypt-state
 
----
-
 - name: Get infos on container
   community.docker.docker_container_info:
     name: migrid
-  register: result
+  register: migrid_container
 
-- name: Check if containers are running
+- name: Check if migrid container exists
   fail:
-    msg: "MiGrid is runing, cannot continue!"
-  when: result.exists
+    msg: "MiGrid container already exists, cannot continue!"
+  when: migrid_container.exists
 
 - name: Run make clean to remove anything already built
   shell:
     cmd: "make clean > make-clean.log 2>&1"
-    chdir: "{{migrid_root}}"
+    chdir: "{{ migrid_root }}"
 
+  #fixme: why does the build happen in copy_static_files
 - name: Run make to build MiGrid
   shell:
     cmd: "make > make.log 2>&1"
-    chdir: "{{migrid_root}}"
+    chdir: "{{ migrid_root }}"
 
 - name: Running docker-compose up 
   community.docker.docker_compose:
-    project_src: "{{migrid_root}}"
-    #build: true
-    #recreate: always
+    project_src: "{{ migrid_root }}"
     build: false
     recreate: always
 
@@ -38,60 +36,60 @@
 
 - name: Stopping containers
   community.docker.docker_compose:
-    project_src: "{{migrid_root}}"
+    project_src: "{{ migrid_root }}"
     build: false
     state: absent
     stopped: true
-    
+
 - name: copy static html files for migrid
   copy:
-    src: "manual/au-overlay/{{ansible_hostname}}/files/{{item.file}}-{{ inventory_hostname }}.html"
-    dest: "{{migrid_state_directory}}/{{item.dest}}"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
-  loop: "{{migrid_static_html_files}}"
+    src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html"
+    dest: "{{ migrid_state_directory }}/{{ item.dest }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+  loop: "{{ migrid_static_html_files }}"
 
 - name: Remove old link files in wwwpublic
   file:
-    path: "{{migrid_state_directory}}/wwwpublic/{{item.dest}}"
+    path: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: absent
-  loop: "{{migrid_static_html_links}}"
+  loop: "{{ migrid_static_html_links }}"
 
 - name: Link static html files in wwwpublic
   file:
-    src: "{{item.file}}-{{inventory_hostname}}.html"
-    dest: "{{migrid_state_directory}}/wwwpublic/{{item.dest}}"
+    src: "{{ item.file }}-{{ inventory_hostname }}.html"
+    dest: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: link
-  loop: "{{migrid_static_html_links}}"
+  loop: "{{ migrid_static_html_links }}"
 
 - name: copy gdp_home/data_categories.json for sif
   copy:
-    src: "manual/au-overlay/{{ansible_hostname}}/files/data_categories.json"
-    dest: "{{migrid_state_directory}}/gdp_home/"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
+    src: "manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json"
+    dest: "{{ migrid_state_directory }}/gdp_home/"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
   when: migrid_base_type == "sif"
 
 # - name: Copy index.html into wwwpublic
 #   copy:
-#     src: "manual/au-overlay/{{ansible_hostname}}/html/index.html"
-#     dest: "{{migrid_state_directory}}/wwwpublic/"
-#     owner: "{{migrid_user}}"
-#     group: "{{migrid_user}}"
+#     src: "manual/au-overlay/{{ ansible_hostname }}/html/index.html"
+#     dest: "{{ migrid_state_directory }}/wwwpublic/"
+#     owner: "{{ migrid_user }}"
+#     group: "{{ migrid_user }}"
 #
 - name: Copy dhparams.pem into certs/
   copy:
-    src: "{{migrid_root}}/httpd/MiG-certificates/dhparams.pem"
+    src: "{{ migrid_root }}/httpd/MiG-certificates/dhparams.pem"
     dest: "{{ migrid_certs }}"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
     remote_src: true
 
 - name: Copy pdf files
   copy:
-    src: "manual/au-overlay/{{ansible_hostname}}/files/{{item.file}}"
-    dest: "{{migrid_state_directory}}/wwwpublic/"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
-  loop: "{{migrid_pdf_files}}"
+    src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}"
+    dest: "{{ migrid_state_directory }}/wwwpublic/"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+  loop: "{{ migrid_pdf_files }}"
   when: migrid_pdf_files is defined

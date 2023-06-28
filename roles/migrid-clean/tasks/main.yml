@@ -1,7 +1,8 @@
-#clean up directories before doing anything is a good thing.. aah the fresh smell of clean :) 
+# clean up directories before doing anything is a good thing.. aah the fresh smell of clean :)
 ---
 
-- name: Prune everyting in docker
+# fixme: this should have checks as it can mean dataloss and downtime
+- name: Prune everything in docker
   community.docker.docker_prune:
     containers: true
     images: true
@@ -12,12 +13,12 @@
     builder_cache: true
   when: migrid_cleanup == true
 
-- name: "Remove {{migrid_auoverlay}}"
+- name: "Remove {{ migrid_au_overlay }}"
   file:
-    path: "{{migrid_auoverlay}}"
+    path: "{{ migrid_au_overlay }}"
     state: absent
 
 - name: "Remove {{ migrid_root }}"
   file:
-    path: "{{migrid_root}}"
+    path: "{{ migrid_root }}"
     state: absent

@@ -13,7 +13,7 @@
 
 - name: "Create directories for lustre mount points"
   file:
-    path: "/mnt/{{item.dest}}"
+    path: "/mnt/{{ item.dest }}"
     owner: "root"
     group: "root"
     state: "directory"
@@ -25,26 +25,27 @@
 # sites at the same time
 - name: Mount Lustre directory
   mount:
-    path: "/mnt/{{item.dest}}"
-    src: "{{item.src}}"
+    path: "/mnt/{{ item.dest }}"
+    src: "{{ item.src }}"
     opts: "flock"
     fstype: "lustre"
     state: mounted
   loop: "{{ migrid_lustre_mount| selectattr('dest', 'match', migrid_lustre_mount_point)|list }}"
 
-- name: "Create dir {{migrid_state_directory}}"
+- name: "Create dir {{ migrid_state_directory }}"
   file:
-    path: "{{migrid_state_directory}}"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
+    path: "{{ migrid_state_directory }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
     state: "directory"
     mode: '0755'
 
-- name: "Create {{migrid_cipher_directory}} when using encryption"
+# encryption stuff
+- name: "Create {{ migrid_cipher_directory }} when using encryption"
   file:
-    path: "{{migrid_cipher_directory}}"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
+    path: "{{ migrid_cipher_directory }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
     state: "directory"
     mode: '0755'
   when: migrid_encrypt_state==true
@@ -52,7 +53,7 @@
 # non encryption stuff
 - name: Create shortcut link
   file:
-    src: "{{migrid_state_directory}}"
-    dest: "{{migrid_root}}/lustate"
+    src: "{{ migrid_state_directory }}"
+    dest: "{{ migrid_root }}/lustate"
     state: link
   when: migrid_encrypt_state==false

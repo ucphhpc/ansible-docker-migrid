@@ -52,12 +52,13 @@
 - name: Set docker-compose.override.yml
   template:
     src: docker-compose.override.yml.j2
-    dest: "{{migrid_root}}/docker-compose.override.yml"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    dest: "{{ migrid_root }}/docker-compose.override.yml"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
+  when: migrid_docker_compose_override is defined
 
 - name: Set docker-compose.yml
   file:
-    src: "{{migrid_root}}/docker-compose_dev.erda.dk_full.yml"
-    dest: "{{migrid_root}}/docker-compose.yml"
+    src: "{{ migrid_root }}/{{ migrid_docker_compose_file }}"
+    dest: "{{ migrid_root }}/docker-compose.yml"
     state: link

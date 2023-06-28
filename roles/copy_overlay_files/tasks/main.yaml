@@ -2,9 +2,9 @@
 # copies overlay files onto server. They are placed in a directory besides migrid
 - name: "Create directory for au-overlay"
   file:
-    path: "{{ migrid_auoverlay }}"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    path: "{{ migrid_au_overlay }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
     state: "directory"
     mode: '0755'
 

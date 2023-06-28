@@ -5,14 +5,14 @@
 - name: "Create directory for MiGrid"
   file:
     path: "{{ migrid_root }}"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
     state: "directory"
 
-- name: "Set safe.directory for {{migrid_root}}"
+- name: "Set safe.directory for {{ migrid_root }}"
   command:
-    cmd: "git config --global --add safe.directory {{migrid_root}}"
-    chdir: "{{migrid_root}}"
+    cmd: "git config --global --add safe.directory {{ migrid_root }}"
+    chdir: "{{ migrid_root }}"
 
 - name: Get infos on container
   community.docker.docker_container_info:
@@ -31,21 +31,21 @@
 
 - name: Changer owner on all files
   file:
-    path: "{{migrid_root}}"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    path: "{{ migrid_root }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
     recurse: true
 
 - name: Set .env
   file:
-    src: "{{migrid_auoverlay}}/{{ansible_hostname}}/env"
-    dest: "{{migrid_root}}/.env"
+    src: "{{ migrid_au_overlay }}/{{ ansible_hostname }}/env"
+    dest: "{{ migrid_root }}/.env"
     state: link
 
 - name: Set Dockerfile
   file:
-    src: "{{migrid_root}}/Dockerfile.{{migrid_container_type}}"
-    dest: "{{migrid_root}}/Dockerfile"
+    src: "{{ migrid_root }}/Dockerfile.{{ migrid_container_type }}"
+    dest: "{{ migrid_root }}/Dockerfile"
     state: link
 
 - name: Set docker-compose.override.yml

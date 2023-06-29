@@ -45,8 +45,8 @@
 
 - name: Set Dockerfile
   file:
-    src: "{{migrid_root}}/Dockerfile.{{migrid_container_type}}"
-    dest: "{{migrid_root}}/Dockerfile"
+    src: Dockerfile.{{ migrid_container_type }}
+    dest: "{{ migrid_root }}/Dockerfile"
     state: link
 
 - name: Set docker-compose.override.yml

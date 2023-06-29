@@ -1,5 +1,4 @@
 ---
-
 - name: restart-logrotate
   service:
     name: logrotate

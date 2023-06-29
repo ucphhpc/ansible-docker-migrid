@@ -8,10 +8,10 @@
 #ansible-playbook -i inventory.yml -l host -u ansib stage-migrid.yml
 
 - name: Finalise the instllation, and stage files
-  hosts: 
+  hosts:
     - all
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
   roles:
     - setup-vars
     - copy-static-files

@@ -1,12 +1,11 @@
 ---
-
-- name: Running docker-compose down 
+- name: Running docker-compose down
   community.docker.docker_compose:
     project_src: "{{migrid_root}}"
     state: absent
   when: migrid_cleanup==false
 
-- name: Running docker-compose down and clean up docker images 
+- name: Running docker-compose down and clean up docker images
   community.docker.docker_compose:
     project_src: "{{migrid_root}}"
     remove_images: all

@@ -1,16 +1,16 @@
 ---
 # install promtail for sending logs to grafana loki
 #user has to exist also on mds lustre server
-- name: "Add promtail group"
+- name: Add promtail group
   group:
     name: promtail
     gid: 1399
     state: present
 
-- name: "Add promtail users"
+- name: Add promtail users
   user:
     name: promtail
-    comment: "promtail user"
+    comment: promtail user
     uid: 1399
     group: promtail
     shell: /bin/bash
@@ -21,14 +21,14 @@
     path: /var/log/promtail
     owner: promtail
     group: promtail
-    mode: 0755
+    mode: "0755"
     state: directory
 
 - name: install Promtail
   apt:
     deb: https://github.com/grafana/loki/releases/download/v{{promtail_version}}/promtail_{{promtail_version}}_amd64.deb
   notify: restart-promtail
-    
+
 - name: Copy configuration file
   template:
     src: config.yml.j2
@@ -38,5 +38,5 @@
 - name: Enable Promtail
   systemd:
     name: promtail
-    enabled: yes
+    enabled: true
     state: started

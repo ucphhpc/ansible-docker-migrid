@@ -10,21 +10,21 @@
 
 - name: Check if migrid container exists
   fail:
-    msg: "MiGrid container already exists, cannot continue!"
+    msg: MiGrid container already exists, cannot continue!
   when: migrid_container.exists
 
 - name: Run make clean to remove anything already built
   shell:
-    cmd: "make clean > make-clean.log 2>&1"
+    cmd: make clean > make-clean.log 2>&1
     chdir: "{{ migrid_root }}"
 
-  #fixme: why does the build happen in copy_static_files
+#fixme: why does the build happen in copy_static_files
 - name: Run make to build MiGrid
   shell:
-    cmd: "make > make.log 2>&1"
+    cmd: make > make.log 2>&1
     chdir: "{{ migrid_root }}"
 
-- name: Running docker-compose up 
+- name: Running docker-compose up
   community.docker.docker_compose:
     project_src: "{{ migrid_root }}"
     build: false
@@ -43,7 +43,7 @@
 
 - name: copy static html files for migrid
   copy:
-    src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html"
+    src: manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html
     dest: "{{ migrid_state_directory }}/{{ item.dest }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -64,7 +64,7 @@
 
 - name: copy gdp_home/data_categories.json for sif
   copy:
-    src: "manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json"
+    src: manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json
     dest: "{{ migrid_state_directory }}/gdp_home/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -87,7 +87,7 @@
 
 - name: Copy pdf files
   copy:
-    src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}"
+    src: manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}
     dest: "{{ migrid_state_directory }}/wwwpublic/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

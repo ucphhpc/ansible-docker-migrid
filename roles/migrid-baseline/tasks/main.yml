@@ -1,17 +1,16 @@
 #this will do that baseline stuff needed for doing migrid on the server
 # depends on migrid-users
 ---
-
-- name: "Create directory for MiGrid"
+- name: Create directory for MiGrid
   file:
     path: "{{ migrid_root }}"
     owner: "{{ migrid_adm }}"
     group: "{{ migrid_adm }}"
-    state: "directory"
+    state: directory
 
-- name: "Set safe.directory for {{ migrid_root }}"
+- name: Set safe.directory for {{ migrid_root }}
   command:
-    cmd: "git config --global --add safe.directory {{ migrid_root }}"
+    cmd: git config --global --add safe.directory {{ migrid_root }}
     chdir: "{{ migrid_root }}"
 
 - name: Get infos on container
@@ -21,7 +20,7 @@
 
 - name: Check if containers are running
   fail:
-    msg: "MiGrid is runing, cannot continue!"
+    msg: MiGrid is runing, cannot continue!
   when: result.exists
 
 - name: Clone docker-migrid

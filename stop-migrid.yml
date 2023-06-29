@@ -1,20 +1,16 @@
 ---
-
 # Stop migrid
 # and also stop and umount encrypted drive
 # ansible-playbook -i inventory.yml -l host -u ansib stop-migrid.yml
 #
 # you can always verify if a mountpoint is unmounted with: mountpoint decrypt_state/
-
-
-- name: "Stop migrid"
+- name: Stop migrid
   hosts:
     - all
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
   roles:
     - setup-vars
     - stop-containers
     - stop-promtail
     - umount-encrypt-state
-    

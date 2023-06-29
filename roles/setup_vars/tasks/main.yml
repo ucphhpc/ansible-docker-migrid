@@ -2,6 +2,7 @@
 # this should be run first
 #This is used for rendering variables for directory structure used to point to state directory
 #This has to be renderend or stuff will fail
+
 - name: Setup state directory pointer for non encryption
   set_fact:
     migrid_state_directory: /mnt/{{migrid_lustre_mount_point}}/{{ansible_hostname}}
@@ -24,3 +25,9 @@
 # - name: debug2
 #   debug:
 #     msg: "migrid cipher dir {{migrid_cipher_directory}}"
+
+- name: install RedHat prerequisits
+  yum:
+    name: "{{ migrid_redhat_prerequisites }}"
+    state: present
+  when: ansible_os_family == "RedHat"

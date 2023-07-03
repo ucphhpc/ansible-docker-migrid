@@ -91,7 +91,7 @@ migrid_lustre_mount:
 
 #promtail_loki_server: 
 promtail_loki_server: ip-loki-server
-# this sets the network card on vm servers where the above 10.170.1.0/24 net is 
+# this sets the network card on vm servers where the above ip-net-site-a net is 
 promtail_loki_net: loki-net-name
 promtail_version: 2.8.2
 #to solve time zone problems in promtail for the log files, we have the below, see config.yml.j2 for promtail-migrid

@@ -15,7 +15,7 @@
 
 - name: Changer owner on all files
   file:
-    path: "{{migrid_au_overlay}}"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    path: "{{ migrid_au_overlay }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
     recurse: true

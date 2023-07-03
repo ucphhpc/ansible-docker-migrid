@@ -1,5 +1,4 @@
 ---
-
 - name: umount gocrypts fs drive
   mount:
     path: "{{migrid_state_directory}}"

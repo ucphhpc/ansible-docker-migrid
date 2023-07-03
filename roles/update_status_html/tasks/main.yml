@@ -6,8 +6,8 @@
   become: false
   shell:
     #cmd: "git name-rev --tags --name-only $(git rev-parse HEAD)"
-    cmd: "git tag | tail -1"
-    chdir: "~/git/migrid/"
+    cmd: git tag | tail -1
+    chdir: ~/git/migrid/
   register: result
 
 - name: register tag
@@ -16,7 +16,7 @@
 
 - name: get deployed migrid version
   shell:
-    cmd: "grep ^MIG_GIT_REV {{migrid_root}}/.env"
+    cmd: grep ^MIG_GIT_REV {{migrid_root}}/.env
   register: result
 
 - name: register deployed migrid version
@@ -25,7 +25,7 @@
 
 - name: get deployed svn version
   shell:
-    cmd: "grep ^MIG_SVN_REV {{migrid_root}}/.env"
+    cmd: grep ^MIG_SVN_REV {{migrid_root}}/.env
   register: result
 
 - name: register deployed svn version

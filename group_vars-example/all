@@ -1,0 +1,105 @@
+---
+#this is an example of all file
+#         _            _     _ 
+#   /\/\ (_) __ _ _ __(_) __| |
+#  /    \| |/ _` | '__| |/ _` |
+# / /\/\ \ | (_| | |  | | (_| |
+# \/    \/_|\__, |_|  |_|\__,_|
+#           |___/   
+
+#migrid settings
+migrid_root: /opt/migrid/docker-migrid      # root directory where all the migrid files recides on the server
+##migrid_auoverlay
+migrid_au_overlay: /opt/migrid/au-overlay   # the au overlay files that are placed ontop of files pulled from docker-migrid repository
+migrid_certs: "{{ migrid_root }}/certs"     # directory where all certificates recides
+migrid_adm: migadm                          # default user for migrid administrator. Only used on linux file system, not while running migrid
+migrid_adm_gid: 1010                        # gid of migrid_adm user
+migrid_adm_uid: 1010                        # uid of migrid_adm user
+migrid_repository: https://github.com/ucphhpc/docker-migrid.git     # the github repository where docker-migrid recides
+migrid_user: mig                            # this is the use on the sever with unique uid/gid
+migrid_encrypt_state: false                 # this is used to set our base expectation for state directory on lustre. That it is only encrypted if specified.
+migrid_decrypt_dir: decrypt_state           # this is the state directory name when encryption is set
+#migrid_state_dir_name: lustate             # the directory name of the state directory. Default lustate
+migrid_docker_compose_preset: docker-compose_dev.erda.dk_full.yml          # link docker-compose to existing compose file if defined. Otherwise you will have to set migrid_docker_compose_custom to what you want to use.
+migrid_docker_compose_file: docker-compose_dev.erda.dk_full.yml # needed ??
+migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
+#migrid_docker_repository_version: ...      # use this to set the migrid-docker version, if not set it will get head.
+ 
+
+#to use upsate_status_html
+migrid_update_status_deploy_version: true   # if defined will update version
+migrid_update_status_subversion: true       # if defined will update subversion number
+
+# This is used when you have a clean never used server only!!!
+# use on ansible-playbook -e migrid_bootstrap=true 
+# FIXME deprecated will soon be removed
+migrid_bootstrap: false
+# enable further cleaning of the environment
+migrid_cleanup: false
+
+
+#certificate links
+migric_cert_dir_links:
+    - { src: "MiG/*", dest: "anon." }
+    - { src: "MiG/*", dest: "cert." }
+    - { src: "MiG/*", dest: "*" }
+    - { src: "MiG/*", dest: "ext." }
+    - { src: "MiG/*", dest: "int." }
+    - { src: "MiG/*", dest: "io." }
+    - { src: "MiG/*", dest: "www." }
+
+migric_cert_file_links:
+    - { src: "MiG/*", dest: "cacert.pem" }
+    - { src: "MiG/*", dest: "combined.pem" }
+    - { src: "MiG/*", dest: "combined.pub" }
+    - { src: "MiG/*", dest: "crl.pem" }
+    - { src: "MiG/*", dest: "server.ca.pem" }
+    - { src: "MiG/*", dest: "server.crt" }
+    - { src: "MiG/*", dest: "server.key" } 
+
+#static files to be copied, dest=the migrid directory
+# will update if its defined, otherwise not.
+migrid_static_html_files:
+    - { file: "about", dest: "wwwpublic" }
+    - { file: "index", dest: "wwwpublic" }
+    - { file: "support", dest: "wwwpublic" }
+    - { file: "terms", dest: "wwwpublic" }
+    - { file: "tips", dest: "wwwpublic" }
+
+#static html links in wwwpublic
+migrid_static_html_links:
+    - { file: "about", dest: "about-snippet.html" }
+    - { file: "index", dest: "index.html" }
+    - { file: "support", dest: "support-snippet.html" }
+    - { file: "terms", dest: "terms-snippet.html" }
+    - { file: "tips", dest: "tips-snippet.html" }
+
+#lustre mount points
+migrid_lustre_mount:
+    - { src: "ip-site-a@tcp1:ip-site-a@tcp1:/erda-site-a", dest: "erda-site-a" }
+    - { src: "ip-site-b@tcp1:ip-site-b@tcp1:/erda-site-b", dest: "erda-site-b" }
+    - { src: "ip-site-a@tcp1:ip-site-a@tcp1:/sif-site-a", dest: "sif-site-a" }
+    - { src: "ip-site-b@tcp1:ip-site-b@tcp1:/sif-site-b", dest: "sif-site-b" }
+
+
+#loki server
+#    __       _    _ 
+#   / /  ___ | | _(_)
+#  / /  / _ \| |/ / |
+# / /__| (_) |   <| |
+# \____/\___/|_|\_\_|
+
+#promtail_loki_server: 
+promtail_loki_server: ip-loki-server
+# this sets the network card on vm servers where the above 10.170.1.0/24 net is 
+promtail_loki_net: loki-net-name
+promtail_version: 2.8.2
+#to solve time zone problems in promtail for the log files, we have the below, see config.yml.j2 for promtail-migrid
+promtail_ts_a: "+02:00"
+promtail_ts_b: "+02:00"
+
+
+# Subnet information for the lustre-network role
+gc_data_subnet: ip-net-site-a
+sh_data_subnet: ip-net-site-b
+

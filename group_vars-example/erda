@@ -1,0 +1,16 @@
+---
+
+#This sets the container type running migrid
+migrid_container_type: rocky8
+
+#This is used to execute for this type
+migrid_base_type: erda
+
+#this will set what lustre mountpoint is used
+migrid_lustre_mount_point: erda-site-a
+
+#pdf files to be staged in state/wwwpublic
+# if not defined it will not be copied
+migrid_pdf_files:
+    - { file: "myfileA.pdf" }
+    - { file: "myfileB.pdf" }

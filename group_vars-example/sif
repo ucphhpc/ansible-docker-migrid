@@ -1,0 +1,20 @@
+---
+
+#This sets the container type running migrid
+migrid_container_type: centos7
+
+#This is used to execute for this type
+migrid_base_type: sif
+
+#this will set what lustre mountpoint is used
+migrid_lustre_mount_point: sif-site-a
+
+#pdf files to be staged in state/wwwpublic
+# if not defined it will not be copied
+migrid_pdf_files:
+    - { file: "myfileA.pdf" }
+    - { file: "myfileB.pdf" }
+
+#to solve time zone problems in promtail for the log files, we have the below, see config.yml.j2 for promtail-migrid
+promtail_ts_a: "+00:00"
+promtail_ts_b: "+02:00"

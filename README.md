@@ -45,3 +45,4 @@ ansible-lint --profile shared --write
 
 # show changes
 git diff
+```

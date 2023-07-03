@@ -1,9 +1,5 @@
 ---
-#This is used to prepare and run stuff in the final fase before starting up for user usage
-#Prerequisite
-#
-# you might need this: 
-# ansible-galaxy collection install community.docker
+# This is used to prepare and run stuff in the final phase before starting up for user usage
 #
 #ansible-playbook -i inventory.yml -l host -u ansib stage-migrid.yml
 
@@ -13,7 +9,7 @@
   gather_facts: yes
   become: yes
   roles:
-    - setup-vars
-    - copy-static-files
-    - update-status-html
-    - promtail-migrid
+    - setup_vars
+    - copy_static_files
+    - update_status_html
+    - promtail_migrid

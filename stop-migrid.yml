@@ -13,8 +13,7 @@
   gather_facts: yes
   become: yes
   roles:
-    - setup-vars
-    - stop-containers
-    - stop-promtail
-    - umount-encrypt-state
-    
+    - setup_vars
+    - stop_containers
+    - stop_promtail
+    - umount_encrypt_state

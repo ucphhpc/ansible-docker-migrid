@@ -20,11 +20,13 @@
 - name: get deployed migrid version
   shell:
     cmd: grep ^MIG_GIT_REV {{ migrid_root }}/.env
-  register: result
+  register: get_deployed_migrid_version
+  ignore_errors: true
 
 - name: register deployed migrid version
   set_fact:
     migrid_git_rev: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: not get_deployed_migrid_version.failed
 
 # fixme: is actually anyone using svn anymore?
 - name: get deployed svn version

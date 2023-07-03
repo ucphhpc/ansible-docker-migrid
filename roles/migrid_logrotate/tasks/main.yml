@@ -1,10 +1,9 @@
 ---
-
-- name: "Install needed packages"
+- name: Install needed packages
   apt:
-    name: "logrotate"
-    state: "present"
-    update_cache: yes
+    name: logrotate
+    state: present
+    update_cache: true
 
 - name: Copy migrid logrotate file
   template:
@@ -21,5 +20,5 @@
 - name: Enable logrotate
   systemd:
     name: logrotate
-    enabled: yes
+    enabled: true
     state: started

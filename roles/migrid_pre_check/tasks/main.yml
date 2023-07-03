@@ -1,5 +1,4 @@
 ---
-
 # pre checks before doing an install migrid
 
 - name: Get infos on container
@@ -9,8 +8,8 @@
 
 - name: Check if containers are running
   fail:
-    msg: "MiGrid is runing, cannot continue!"
-  when: result.exists 
+    msg: MiGrid is runing, cannot continue!
+  when: result.exists
 
 - name: find files in state
   find:

@@ -7,34 +7,42 @@
   shell:
     #cmd: "git name-rev --tags --name-only $(git rev-parse HEAD)"
     cmd: git tag | tail -1
+    # fixme: hardcoded repo path, should be configurable or autodetected
     chdir: ~/git/migrid/
   register: result
+  when: migrid_update_status_deploy_version is defined
 
 - name: register tag
   set_fact:
     deploy_version: "{{ { 'deploy_version' : result.stdout } }}"
+  when: migrid_update_status_deploy_version is defined
 
 - name: get deployed migrid version
   shell:
-    cmd: grep ^MIG_GIT_REV {{migrid_root}}/.env
-  register: result
+    cmd: grep ^MIG_GIT_REV {{ migrid_root }}/.env
+  register: get_deployed_migrid_version
+  ignore_errors: true
 
 - name: register deployed migrid version
   set_fact:
     migrid_git_rev: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: not get_deployed_migrid_version.failed
 
+# fixme: is actually anyone using svn anymore?
 - name: get deployed svn version
   shell:
-    cmd: grep ^MIG_SVN_REV {{migrid_root}}/.env
+    cmd: grep ^MIG_SVN_REV {{ migrid_root }}/.env
   register: result
+  when: migrid_update_status_subversion is defined
 
 - name: register deployed svn version
   set_fact:
-    migrid_git_svn: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+    migrid_svn_rev: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: migrid_update_status_subversion is defined
 
 - name: update status.html
   copy:
-    content: "{{ deploy_version | combine(migrid_git_rev)|combine(migrid_git_svn ) |to_json }}"
-    dest: "{{migrid_state_directory}}/wwwpublic/status.html"
-    owner: "{{migrid_user}}"
-    group: "{{migrid_user}}"
+    content: "{{ deploy_version | combine(migrid_git_rev) | combine(migrid_svn_rev ) | to_json }}"
+    dest: "{{ migrid_state_directory }}/wwwpublic/status.html"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"

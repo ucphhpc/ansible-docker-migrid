@@ -3,7 +3,7 @@
 - name: Create {{ migrid_adm }} group
   group:
     name: "{{ migrid_adm }}"
-    gid: 1010
+    gid: "{{ migrid_adm_gid }}"
     state: present
 
 - name: Create {{ migrid_adm }} user
@@ -12,13 +12,14 @@
     comment: MiGrid User
     group: "{{ migrid_adm }}"
     shell: /bin/bash
-    uid: 1010
+    # fixme: hardcoded userids are evil
+    uid: "{{ migrid_adm_uid }}"
     password_lock: true
 
 - name: Create {{ migrid_user }} group
   group:
     name: "{{ migrid_user }}"
-    gid: "{{migrid_gid}}"
+    gid: "{{ migrid_user_gid }}"
     state: present
 
 - name: Create {{ migrid_user }} user
@@ -27,5 +28,5 @@
     comment: MiGrid User
     group: "{{ migrid_user }}"
     shell: /bin/bash
-    uid: "{{migrid_uid}}"
+    uid: "{{ migrid_user_uid }}"
     password_lock: true

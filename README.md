@@ -41,7 +41,7 @@ To make the codebase clean, you can use `ansible-lint` to apply certain standard
 # commit all previous changes in git to have a clean state
 
 # run ansible-lint and let it autochange all findings
-ansible-lint --profile shared --write
+ansible-lint --profile shared --write all
 
 # show changes
 git diff

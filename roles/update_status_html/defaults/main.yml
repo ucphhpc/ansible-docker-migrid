@@ -1,0 +1,7 @@
+---
+deploy_version:
+  deploy_version: unknown
+migrid_svn_rev:
+  subversion: not used
+migrid_git_rev:
+  migrid_git_rev: unknown

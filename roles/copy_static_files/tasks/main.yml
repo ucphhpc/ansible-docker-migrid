@@ -48,12 +48,14 @@
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
   loop: "{{ migrid_static_html_files }}"
+  when: migrid_static_html_files is defined
 
 - name: Remove old link files in wwwpublic
   file:
     path: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: absent
   loop: "{{ migrid_static_html_links }}"
+  when: migrid_static_html_links is defined
 
 - name: Link static html files in wwwpublic
   file:
@@ -61,6 +63,7 @@
     dest: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: link
   loop: "{{ migrid_static_html_links }}"
+  when: migrid_static_html_links is defined
 
 - name: copy gdp_home/data_categories.json for sif
   copy:

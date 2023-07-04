@@ -54,6 +54,6 @@
 - name: Create shortcut link
   file:
     src: "{{ migrid_state_directory }}"
-    dest: "{{ migrid_root }}/lustate"
+    dest: "{{ migrid_root }}/{{ migrid_state_dir_name }}"
     state: link
   when: migrid_encrypt_state==false

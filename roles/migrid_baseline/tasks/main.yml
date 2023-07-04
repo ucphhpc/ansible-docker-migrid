@@ -16,19 +16,20 @@
 - name: Get infos on container
   community.docker.docker_container_info:
     name: migrid
-  register: result
+  register: migrid_container
 
-- name: Check if containers are running
+- name: Check if migrid container exists
   fail:
-    msg: MiGrid is runing, cannot continue!
-  when: result.exists
+    msg: MiGrid container already exists, cannot continue!
+  when: migrid_container.exists
 
 - name: Clone docker-migrid
   git:
-    repo: "{{migrid_repository}}"
-    dest: "{{migrid_root}}"
+    repo: "{{ migrid_docker_repository }}"
+    dest: "{{ migrid_root }}"
+    version: "{{ migrid_docker_repository_version | default('master') }}"
 
-- name: Changer owner on all files
+- name: Change owner on all files
   file:
     path: "{{ migrid_root }}"
     owner: "{{ migrid_adm }}"
@@ -40,22 +41,43 @@
     src: "{{ migrid_au_overlay }}/{{ ansible_hostname }}/env"
     dest: "{{ migrid_root }}/.env"
     state: link
+    force: false
 
 - name: Set Dockerfile
   file:
-    src: "{{ migrid_root }}/Dockerfile.{{ migrid_container_type }}"
+    src: Dockerfile.{{ migrid_container_type }}
     dest: "{{ migrid_root }}/Dockerfile"
     state: link
 
 - name: Set docker-compose.override.yml
   template:
     src: docker-compose.override.yml.j2
-    dest: "{{migrid_root}}/docker-compose.override.yml"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    dest: "{{ migrid_root }}/docker-compose.override.yml"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
+  when: migrid_docker_compose_override is defined
 
-- name: Set docker-compose.yml
+- name: Link to existing docker-compose.yml
   file:
-    src: "{{migrid_root}}/docker-compose_dev.erda.dk_full.yml"
-    dest: "{{migrid_root}}/docker-compose.yml"
+    src: "{{ migrid_root }}/{{ migrid_docker_compose_preset }}"
+    dest: "{{ migrid_root }}/docker-compose.yml"
     state: link
+  when:
+    - migrid_docker_compose_preset is defined
+    - migrid_docker_compose_custom is undefined
+
+- name: Copy custom docker-compose.yml
+  copy:
+    src: "{{ migrid_docker_compose_custom }}"
+    dest: "{{ migrid_root }}/"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
+  when: migrid_docker_compose_custom is defined
+
+- name: Link to custom docker-compose.yml
+  file:
+    src: "{{ migrid_root }}/{{ migrid_docker_compose_custom | basename }}"
+    dest: "{{ migrid_root }}/docker-compose.yml"
+    state: link
+    force: true
+  when: migrid_docker_compose_custom is defined

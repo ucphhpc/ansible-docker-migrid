@@ -10,12 +10,12 @@
 
 - name: copy files from manual/au-overlay to server
   synchronize:
-    src: manual/au-overlay/{{ansible_hostname}}/
-    dest: /opt/migrid/au-overlay/{{ansible_hostname}}/
+    src: manual/au-overlay/{{ ansible_hostname }}/
+    dest: "{{ migrid_au_overlay }}/{{ ansible_hostname }}/"
 
 - name: Changer owner on all files
   file:
-    path: "{{migrid_auoverlay}}"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+    path: "{{ migrid_au_overlay }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
     recurse: true

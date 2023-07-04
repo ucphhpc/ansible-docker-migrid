@@ -2,12 +2,12 @@
 #ansible-playbook --ask-vault-pass -i inventory.yml -l host -u ansib install-migrid.yml
 ---
 - name: deploy certificates from vault
-  hosts: 
+  hosts:
     - all
   vars:
     migrid_cleanup: true
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
   roles:
     - setup_vars
     - migrid_pre_check

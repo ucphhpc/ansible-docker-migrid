@@ -6,3 +6,4 @@ local_git_dir_to_sync:
   - { src: "group_vars" }
   - { src: "host_vars" }
   - { src: "manual" }
+  - { src: "inventory.yml" }

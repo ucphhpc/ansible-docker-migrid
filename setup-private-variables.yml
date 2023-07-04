@@ -1,0 +1,10 @@
+---
+#used to do manual copy of variables to use ansible-docker-migrid playbooks
+#
+#ansible-playbook -l localhost setup-private-variables.yml
+- name: Setup private variables
+  hosts: localhost
+  gather_facts: no 
+  become: false
+  roles:
+    - private-variables

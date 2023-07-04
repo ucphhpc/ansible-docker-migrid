@@ -1,0 +1,24 @@
+---
+#This is used to prepare this ansible-docker-migrid repository with variables from internal git
+- name: pull the latest on private git
+  command:
+    cmd: "git pull"
+    chdir: "{{ local_git_dir }}"
+
+- name: Remove {{ item.src }}
+  become: false
+  file:
+    path: "{{ local_this_dir }}/{{ item.src }}"
+    state: absent
+  loop: "{{ local_git_dir_to_sync }}"
+  delegate_to: localhost
+  check_mode: false
+
+- name: Copy files over from {{ item.src }}
+  become: false
+  synchronize:
+    src: "{{ local_git_dir }}/{{ item.src }}"
+    dest: "{{ local_this_dir }}"
+  loop: "{{ local_git_dir_to_sync }}"
+  delegate_to: localhost
+  check_mode: false

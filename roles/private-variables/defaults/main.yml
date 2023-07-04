@@ -1,0 +1,8 @@
+---
+local_git_dir: "~/git/migrid"
+local_this_dir: "~/github/ansible-docker-migrid"
+
+local_git_dir_to_sync:
+  - { src: "group_vars" }
+  - { src: "host_vars" }
+  - { src: "manual" }

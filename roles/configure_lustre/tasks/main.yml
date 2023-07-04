@@ -1,0 +1,8 @@
+---
+- name: Copy lnet.conf to modprobe.d
+  template:
+    src: lnet.conf.j2
+    dest: /etc/modprobe.d/lnet.conf
+    owner: root
+    group: root
+    mode: "0644"

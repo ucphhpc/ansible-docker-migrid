@@ -1,13 +1,6 @@
 ---
 # deals with creating dirs for mounting lustre
 # depends on migrid-baseline
-- name: Copy lnet.conf to modprobe.d
-  copy:
-    src: lnet.conf
-    dest: /etc/modprobe.d/
-    owner: root
-    group: root
-    mode: "0644"
 
 #FIXME: the strings in migrid_lustre_mount.dest should match up with migrid_lustre_mount_point
 

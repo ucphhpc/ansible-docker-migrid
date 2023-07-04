@@ -25,11 +25,11 @@
     src: "{{ item.src }}{{ inventory_hostname }}"
     dest: "{{ migrid_certs }}/{{ item.dest }}{{ inventory_hostname }}"
     state: link
-  loop: "{{ migrid_cert_dir_links | default([]) }}"
+  loop: "{{ migrid_cert_dir_links }}"
 
 - name: Create symbolic links for files
   file:
     src: "{{ item.src }}{{ inventory_hostname }}/{{ item.dest }}"
     dest: "{{ migrid_certs }}/{{ item.dest }}"
     state: link
-  loop: "{{ migrid_cert_dir_links | default([]) }}"
+  loop: "{{ migrid_cert_dir_links }}"

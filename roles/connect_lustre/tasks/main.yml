@@ -3,7 +3,6 @@
 # depends on migrid-baseline
 
 #FIXME: the strings in migrid_lustre_mount.dest should match up with migrid_lustre_mount_point
-
 - name: Create directories for lustre mount points
   file:
     path: "{{ migrid_connect_lustre_mount_prefix }}/{{ item.dest }}"
@@ -11,7 +10,7 @@
     group: root
     state: directory
     mode: "0755"
-  loop: "{{ migrid_lustre_mount | selectattr('dest', 'match', migrid_base_type) | list }}"
+  loop: "{{ migrid_lustre_mount | selectattr('dest', 'contains', migrid_base_type) | list }}"
 
 # this will select the drive to be mounted based on the variable migrid_lustre_mount_point
 # it will only mount the one specified in migrid_lustre_mount_point so it cannot mount both 

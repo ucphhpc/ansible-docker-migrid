@@ -76,9 +76,9 @@ migrid_static_html_links:
 #lustre mount points
 migrid_lustre_mount:
     - { src: "ip-site-a@tcp1:ip-site-a@tcp1:/erda-site-a", dest: "erda-site-a" }
-    - { src: "ip-site-b@tcp1:ip-site-b@tcp1:/erda-site-b", dest: "erda-site-b" }
+    - { src: "ip-site-b@tcp2:ip-site-b@tcp2:/erda-site-b", dest: "erda-site-b" }
     - { src: "ip-site-a@tcp1:ip-site-a@tcp1:/sif-site-a", dest: "sif-site-a" }
-    - { src: "ip-site-b@tcp1:ip-site-b@tcp1:/sif-site-b", dest: "sif-site-b" }
+    - { src: "ip-site-b@tcp2:ip-site-b@tcp2:/sif-site-b", dest: "sif-site-b" }
 
 
 #loki server

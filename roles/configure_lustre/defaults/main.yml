@@ -1,0 +1,3 @@
+---
+# default from AU
+configure_lustre_lnet_networks: tcp1(ens224),tcp2(ens256)

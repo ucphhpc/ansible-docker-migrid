@@ -1,2 +1,13 @@
 ---
-migrid_state_dir_name: lustate
+# the name of the symlink in the docker-migrid repo pointing to the state directory
+migrid_connect_lustre_state_link: lustate
+
+# the directory in which all the mountpoints should be created
+migrid_connect_lustre_mount_prefix: /mnt
+
+# wheather or not the the role should actually mount the Lustre filesystem
+# otherwise only the symlink is created
+migrid_connect_lustre_configure_mount: true
+
+# mountoptions for the Lustre filesystem that will be used
+migrid_connect_lustre_mount_options: flock

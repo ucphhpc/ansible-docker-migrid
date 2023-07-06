@@ -19,6 +19,7 @@
     - copy_overlay_files
     - migrid_baseline
     - copy_cert_files
+    - configure_lustre
     - connect_lustre
     - setup_encrypt_state
     - startup_encrypt_state

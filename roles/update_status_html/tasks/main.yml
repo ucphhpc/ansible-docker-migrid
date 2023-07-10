@@ -31,7 +31,7 @@
 
 - name: print result
   debug:
-    msg: result
+    msg: " {{ result }}"
 
 - name: register ansible-docker-migrid version
   set_fact:

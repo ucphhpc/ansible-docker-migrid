@@ -36,7 +36,7 @@
 - name: register ansible-docker-migrid version
   set_fact:
     ansible_docker_migrid_version: "{{ { 'ansible_docker_migrid_version' : result.stdout } }}"
-  when: result.rc==0
+  when: result.rc=="0"
 
 #
 # get values from env file

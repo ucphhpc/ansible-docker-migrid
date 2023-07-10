@@ -29,6 +29,10 @@
     chdir: ~
   register: result
 
+- name: print result
+  debug:
+    msg: result
+
 - name: register ansible-docker-migrid version
   set_fact:
     ansible_docker_migrid_version: "{{ { 'ansible_docker_migrid_version' : result.stdout } }}"

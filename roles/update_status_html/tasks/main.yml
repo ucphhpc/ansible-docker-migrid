@@ -1,7 +1,11 @@
 ---
 # builds that status.html file that shows the deployed versions
 
-- name: get git tag
+#
+# get versions
+#
+
+- name: get local git tag
   delegate_to: localhost
   become: false
   shell:
@@ -14,35 +18,79 @@
 
 - name: register tag
   set_fact:
-    deploy_version: "{{ { 'deploy_version' : result.stdout } }}"
+    deploy_local_version: "{{ { 'deploy_local_version' : result.stdout } }}"
   when: migrid_update_status_deploy_version is defined
+
+- name: get ansible-docker-migrid version
+  delegate_to: localhost
+  become: false
+  shell:
+    cmd: ansible-galaxy collection list | grep ucphhpc.docker_migrid|cut -d" " -f2
+    chdir: ~
+  register: result
+
+- name: register ansible-docker-migrid version
+  set_fact:
+    ansible_docker_migrid_version: "{{ { 'ansible_docker_migrid_version' : result.stdout } }}"
+  when: result.rc==0
+
+#
+# get values from env file
+#
 
 - name: get deployed migrid version
   shell:
     cmd: grep ^MIG_GIT_REV {{ migrid_root }}/.env
-  register: get_deployed_migrid_version
-  ignore_errors: true
+  register: result
 
 - name: register deployed migrid version
   set_fact:
     migrid_git_rev: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
-  when: not get_deployed_migrid_version.failed
+  when: result.rc==0
 
-# fixme: is actually anyone using svn anymore?
-- name: get deployed svn version
+- name: get WITH_GIT from env file
   shell:
-    cmd: grep ^MIG_SVN_REV {{ migrid_root }}/.env
+    cmd: grep ^WITH_GIT {{ migrid_root }}/.env
   register: result
-  when: migrid_update_status_subversion is defined
-
-- name: register deployed svn version
+  
+- name: register WITH_GIT
   set_fact:
-    migrid_svn_rev: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
-  when: migrid_update_status_subversion is defined
+    migrid_with_git: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: result.rc==0
+
+- name: get MIG_GIT_BRANCH from env file
+  shell:
+    cmd: grep ^MIG_GIT_BRANCH {{ migrid_root }}/.env
+  register: result
+  
+- name: register migrid git branch
+  set_fact:
+    migrid_git_branch: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: result.rc==0
+
+- name: get PREFER_PYTHON3 from env file
+  shell:
+    cmd: grep ^PREFER_PYTHON3 {{ migrid_root }}/.env
+  register: result
+  
+- name: register migrid perfer python3
+  set_fact:
+    migrid_perfer_python3: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: result.rc==0
+
+- name: get ENABLE_GDP from env file
+  shell:
+    cmd: grep ^ENABLE_GDP {{ migrid_root }}/.env
+  register: result
+  
+- name: register enable gdp
+  set_fact:
+    migrid_enable_gdp: "{{ { result.stdout.split('=')[0]:result.stdout.split('=')[1] } }}"
+  when: result.rc==0
 
 - name: update status.html
   copy:
-    content: "{{ deploy_version | combine(migrid_git_rev) | combine(migrid_svn_rev ) | to_json }}"
+    content: "{{ deploy_local_version | ansible_docker_migrid_version | combine(migrid_git_rev) | combine(migrid_with_git) | combine(migrid_git_branch) | combine(migrid_perfer_python3) | combine(migrid_enable_gdp) | to_json }}"
     dest: "{{ migrid_state_directory }}/wwwpublic/status.html"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

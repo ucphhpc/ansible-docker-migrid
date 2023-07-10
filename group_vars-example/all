@@ -15,14 +15,14 @@ migrid_certs: "{{ migrid_root }}/certs"     # directory where all certificates r
 migrid_adm: migadm                          # default user for migrid administrator. Only used on linux file system, not while running migrid
 migrid_adm_gid: 1010                        # gid of migrid_adm user
 migrid_adm_uid: 1010                        # uid of migrid_adm user
-migrid_repository: https://github.com/ucphhpc/docker-migrid.git     # the github repository where docker-migrid recides
+migrid_docker_repository: https://github.com/ucphhpc/docker-migrid.git     # the github repository where docker-migrid recides
 migrid_user: mig                            # this is the use on the sever with unique uid/gid
 migrid_encrypt_state: false                 # this is used to set our base expectation for state directory on lustre. That it is only encrypted if specified.
 migrid_decrypt_dir: decrypt_state           # this is the state directory name when encryption is set
 migrid_docker_compose_preset: docker-compose_dev.erda.dk_full.yml          # link docker-compose to existing compose file if defined. Otherwise you will have to set migrid_docker_compose_custom to what you want to use.
 migrid_docker_compose_file: docker-compose_dev.erda.dk_full.yml # needed ??
 migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
-#migrid_docker_repository_version: ...      # use this to set the migrid-docker version, if not set it will get head.
+#migrid_docker_repository_version:...      # use this to set the migrid-docker version, if not set it will get head.
  
 
 #to use upsate_status_html
@@ -38,7 +38,7 @@ migrid_cleanup: false
 
 
 #certificate links
-migric_cert_dir_links:
+migrid_cert_dir_links:
     - { src: "MiG/*", dest: "anon." }
     - { src: "MiG/*", dest: "cert." }
     - { src: "MiG/*", dest: "*" }
@@ -47,7 +47,7 @@ migric_cert_dir_links:
     - { src: "MiG/*", dest: "io." }
     - { src: "MiG/*", dest: "www." }
 
-migric_cert_file_links:
+migrid_cert_file_links:
     - { src: "MiG/*", dest: "cacert.pem" }
     - { src: "MiG/*", dest: "combined.pem" }
     - { src: "MiG/*", dest: "combined.pub" }

@@ -32,4 +32,4 @@
     src: "{{ item.src }}{{ inventory_hostname }}/{{ item.dest }}"
     dest: "{{ migrid_certs }}/{{ item.dest }}"
     state: link
-  loop: "{{ migrid_cert_dir_links }}"
+  loop: "{{ migric_cert_file_links }}"

@@ -33,6 +33,22 @@ Afterwards the roles can be used like this:
     ...
 ```
 
+Another way is to use collections in the playbook, like this example of start-migrid.yml:
+```
+- name: Start migrid
+  hosts:
+    - all
+  collections:
+    - ucphhpc.docker_migrid
+  gather_facts: true
+  become: true
+  roles:
+    - setup_vars
+    - startup_encrypt_state
+    - start_promtail
+    - start_containers    
+```
+
 ## Linting
 
 To make the codebase clean, you can use `ansible-lint` to apply certain standards. A good example is using the `shared` profile.

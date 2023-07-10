@@ -29,18 +29,15 @@
     chdir: ~
   register: result
 
-- name: print result
-  debug:
-    msg: " {{ result }}"
-
-- name: print var
-  debug:
-    var: result.rc==0 
-
 - name: register ansible-docker-migrid version
   set_fact:
     ansible_docker_migrid_version: "{{ { 'ansible_docker_migrid_version' : result.stdout } }}"
   when: result.rc==0
+
+- name: print result
+  debug:
+    msg: " {{ ansible_docker_migrid_version }}"
+
 
 #
 # get values from env file

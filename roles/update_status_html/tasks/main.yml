@@ -34,11 +34,6 @@
     ansible_docker_migrid_version: "{{ { 'ansible_docker_migrid_version' : result.stdout } }}"
   when: result.rc==0
 
-- name: print result
-  debug:
-    msg: " {{ ansible_docker_migrid_version }}"
-
-
 #
 # get values from env file
 #
@@ -95,7 +90,7 @@
 
 - name: update status.html
   copy:
-    content: "{{ deploy_local_version | ansible_docker_migrid_version | combine(migrid_git_rev) | combine(migrid_with_git) | combine(migrid_git_branch) | combine(migrid_perfer_python3) | combine(migrid_enable_gdp) | to_json }}"
+    content: "{{ deploy_local_version | combine(ansible_docker_migrid_version) | combine(migrid_git_rev) | combine(migrid_with_git) | combine(migrid_git_branch) | combine(migrid_perfer_python3) | combine(migrid_enable_gdp) | to_json }}"
     dest: "{{ migrid_state_directory }}/wwwpublic/status.html"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

@@ -36,9 +36,9 @@
     group: "{{ migrid_adm }}"
     recurse: true
 
-- name: Set .env
+- name: Link .env in migrid_root
   file:
-    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    src: "{{ migrid_baseline_env_src }}"
     dest: "{{ migrid_root }}/.env"
     state: link
     force: false

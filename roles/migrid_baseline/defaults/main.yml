@@ -1,0 +1,3 @@
+---
+# this should correspond to migrid_copy_overlay_files_dest
+migrid_baseline_env_src: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"

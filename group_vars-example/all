@@ -10,7 +10,7 @@
 #migrid settings
 migrid_root: /opt/migrid/docker-migrid      # root directory where all the migrid files recides on the server
 ##migrid_auoverlay
-migrid_au_overlay: /opt/migrid/au-overlay   # the au overlay files that are placed ontop of files pulled from docker-migrid repository
+migrid_overlay: /opt/migrid/au-overlay   # the au overlay files that are placed ontop of files pulled from docker-migrid repository
 migrid_certs: "{{ migrid_root }}/certs"     # directory where all certificates recides
 migrid_adm: migadm                          # default user for migrid administrator. Only used on linux file system, not while running migrid
 migrid_adm_gid: 1010                        # gid of migrid_adm user

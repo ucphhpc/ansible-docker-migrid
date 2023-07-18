@@ -12,9 +12,9 @@
     builder_cache: true
   when: migrid_cleanup == true
 
-- name: Remove {{ migrid_au_overlay }}
+- name: Remove {{ migrid_overlay }}
   file:
-    path: "{{ migrid_au_overlay }}"
+    path: "{{ migrid_overlay }}"
     state: absent
 
 - name: Remove {{ migrid_root }}

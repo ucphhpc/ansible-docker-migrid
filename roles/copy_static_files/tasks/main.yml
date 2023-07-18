@@ -43,7 +43,7 @@
 
 - name: copy static html files for migrid
   copy:
-    src: manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html
+    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html"
     dest: "{{ migrid_state_directory }}/{{ item.dest }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -67,7 +67,7 @@
 
 - name: copy gdp_home/data_categories.json for sif
   copy:
-    src: manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json
+    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/files/data_categories.json"
     dest: "{{ migrid_state_directory }}/gdp_home/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -75,7 +75,7 @@
 
 # - name: Copy index.html into wwwpublic
 #   copy:
-#     src: "manual/au-overlay/{{ ansible_hostname }}/html/index.html"
+#     src: "{{ migrid_overlay }}/{{ ansible_hostname }}/html/index.html"
 #     dest: "{{ migrid_state_directory }}/wwwpublic/"
 #     owner: "{{ migrid_user }}"
 #     group: "{{ migrid_user }}"
@@ -90,7 +90,7 @@
 
 - name: Copy pdf files
   copy:
-    src: manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}
+    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/files/{{ item.file }}"
     dest: "{{ migrid_state_directory }}/wwwpublic/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

@@ -13,6 +13,7 @@
     cmd: git config --global --add safe.directory {{ migrid_root }}
     chdir: "{{ migrid_root }}"
 
+  # fixme: code duplication: this is already done in migrid_pre_checks
 - name: Get infos on container
   community.docker.docker_container_info:
     name: migrid

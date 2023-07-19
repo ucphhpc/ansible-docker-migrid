@@ -17,17 +17,8 @@
     file_type: any
     hidden: true
   register: found_files
-  when: migrid_bootstrap == false
-
-#note that migrid_bootstrap == "true" is a string because true it not real outside ansible
-# FIXME: bootstrap is deprecated
-- name: set matched
-  set_fact:
-    found_files:
-      matched: 1
-  when: migrid_bootstrap == "true"
 
 - name: Check state for files
   fail:
     msg: "{{migrid_root}}/state is not empty!"
-  when: found_files.matched != 0 and migrid_bootstrap == false
+  when: found_files.matched != 0

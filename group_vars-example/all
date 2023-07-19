@@ -29,10 +29,6 @@ migrid_docker_compose_override: true        # to enable that the docker-compose 
 migrid_update_status_deploy_version: true   # if defined will update version
 migrid_update_status_subversion: true       # if defined will update subversion number
 
-# This is used when you have a clean never used server only!!!
-# use on ansible-playbook -e migrid_bootstrap=true 
-# FIXME deprecated will soon be removed
-migrid_bootstrap: false
 # enable further cleaning of the environment
 migrid_cleanup: false
 

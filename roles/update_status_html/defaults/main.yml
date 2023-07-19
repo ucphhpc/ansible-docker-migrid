@@ -1,7 +1,15 @@
 ---
-deploy_version:
-  deploy_version: unknown
-migrid_svn_rev:
-  subversion: not used
+deploy_local_version:
+  deploy_local_version: unknown
+ansible_docker_migrid_version:
+  ansible_docker_migrid_version: unknown
+migrid_with_git:
+  WITH_GIT: not set
 migrid_git_rev:
-  migrid_git_rev: unknown
+  MIG_GIT_REV: not set
+migrid_git_branch:
+  MIG_GIT_BRANCH: not set
+migrid_perfer_python3:
+  PREFER_PYTHON3: not set
+migrid_enable_gdp:
+  ENABLE_GDP: not set

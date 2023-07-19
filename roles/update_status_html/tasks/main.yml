@@ -14,18 +14,18 @@
     # fixme: hardcoded repo path, should be configurable or autodetected
     chdir: ~/git/migrid/
   register: result
-  when: migrid_update_status_deploy_version is defined
+  when: migrid_update_status_deploy_version == true
 
 - name: register tag
   set_fact:
     deploy_local_version: "{{ { 'deploy_local_version' : result.stdout } }}"
-  when: migrid_update_status_deploy_version is defined
+  when: migrid_update_status_deploy_version == true
 
 - name: get ansible-docker-migrid version
   delegate_to: localhost
   become: false
   shell:
-    cmd: ansible-galaxy collection list | grep ucphhpc.docker_migrid|cut -d" " -f2
+    cmd: "ansible-galaxy collection list | grep ucphhpc.docker_migrid|cut -d' ' -f2"
     chdir: ~
   register: result
 
@@ -41,6 +41,7 @@
 - name: get deployed migrid version
   shell:
     cmd: grep ^MIG_GIT_REV {{ migrid_root }}/.env
+  ignore_errors: true
   register: result
 
 - name: register deployed migrid version

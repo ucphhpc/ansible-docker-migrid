@@ -1,4 +1,5 @@
 ---
 migrid_clean_docker_prune_all: true
 migrid_clean_remove_overlay: true
+migrid_clean_git_reset: false
 migrid_clean_remove_app_root: true

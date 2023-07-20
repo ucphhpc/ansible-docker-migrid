@@ -10,13 +10,16 @@
     networks: true
     volumes: true
     builder_cache: true
+  when: migrid_clean_docker_prune_all == true
 
 - name: Remove {{ migrid_overlay }}
   file:
     path: "{{ migrid_overlay }}"
     state: absent
+  when: migrid_clean_remove_overlay == true
 
 - name: Remove {{ migrid_root }}
   file:
     path: "{{ migrid_root }}"
     state: absent
+  when: migrid_clean_remove_app_root == true

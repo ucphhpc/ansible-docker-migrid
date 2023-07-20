@@ -27,10 +27,12 @@
     clone: false
   when: 
     - migrid_clean_git_reset == true
+    - migrid_clean_remove_app_root == false
     - migrid_docker_repository is defined
 
 - name: Remove {{ migrid_root }}
   file:
     path: "{{ migrid_root }}"
     state: absent
-  when: migrid_clean_remove_app_root == true
+  when:
+    - migrid_clean_remove_app_root == true

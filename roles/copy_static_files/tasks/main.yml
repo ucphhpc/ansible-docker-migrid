@@ -50,18 +50,12 @@
   loop: "{{ migrid_static_html_files }}"
   when: migrid_static_html_files is defined
 
-- name: Remove old link files in wwwpublic
-  file:
-    path: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
-    state: absent
-  loop: "{{ migrid_static_html_links }}"
-  when: migrid_static_html_links is defined
-
 - name: Link static html files in wwwpublic
   file:
     src: "{{ item.file }}-{{ inventory_hostname }}.html"
     dest: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: link
+    force: true
   loop: "{{ migrid_static_html_links }}"
   when: migrid_static_html_links is defined
 

@@ -29,10 +29,6 @@ migrid_docker_compose_override: true        # to enable that the docker-compose 
 migrid_update_status_deploy_version: true   # if defined will update version
 migrid_update_status_subversion: true       # if defined will update subversion number
 
-# enable further cleaning of the environment
-migrid_cleanup: false
-
-
 #certificate links
 migrid_cert_dir_links:
     - { src: "MiG/*", dest: "anon." }

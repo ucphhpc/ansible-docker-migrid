@@ -4,8 +4,6 @@
 - name: deploy certificates from vault
   hosts:
     - all
-  vars:
-    migrid_cleanup: true
   gather_facts: true
   become: true
   roles:

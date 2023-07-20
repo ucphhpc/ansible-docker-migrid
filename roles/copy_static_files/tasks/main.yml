@@ -43,7 +43,7 @@
 
 - name: copy static html files for migrid
   copy:
-    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html"
+    src: "{{ migrid_copy_static_files_html_src }}"
     dest: "{{ migrid_state_directory }}/{{ item.dest }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -67,7 +67,7 @@
 
 - name: copy gdp_home/data_categories.json for sif
   copy:
-    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/files/data_categories.json"
+    src: "{{ migrid_copy_static_files_dat_src }}"
     dest: "{{ migrid_state_directory }}/gdp_home/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -90,7 +90,7 @@
 
 - name: Copy pdf files
   copy:
-    src: "{{ migrid_overlay }}/{{ ansible_hostname }}/files/{{ item.file }}"
+    src: "{{ migrid_copy_static_files_pdf_src }}"
     dest: "{{ migrid_state_directory }}/wwwpublic/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

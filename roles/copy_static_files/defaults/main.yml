@@ -1,0 +1,4 @@
+---
+migrid_copy_static_files_html_src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html"
+migrid_copy_static_files_dat_src:  "manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json"
+migrid_copy_static_files_pdf_src:  "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}"

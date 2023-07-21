@@ -1,0 +1,13 @@
+---
+# remove all docker images, volumes, build cache, etc.
+migrid_clean_docker_prune_all: true
+
+# remove the {{ migrid_overlay }} directory
+migrid_clean_remove_overlay: true
+
+# run a `git reset --hard ` in the docker-migrid repo
+# this only applies if migrid_clean_remove_app_root if false
+migrid_clean_git_reset: false
+
+# Remove the whole docker-migrid repo
+migrid_clean_remove_app_root: true

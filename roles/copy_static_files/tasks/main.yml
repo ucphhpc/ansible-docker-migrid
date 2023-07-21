@@ -43,31 +43,25 @@
 
 - name: copy static html files for migrid
   copy:
-    src: manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html
+    src: "{{ migrid_copy_static_files_html_src }}"
     dest: "{{ migrid_state_directory }}/{{ item.dest }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
   loop: "{{ migrid_static_html_files }}"
   when: migrid_static_html_files is defined
 
-- name: Remove old link files in wwwpublic
-  file:
-    path: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
-    state: absent
-  loop: "{{ migrid_static_html_links }}"
-  when: migrid_static_html_links is defined
-
 - name: Link static html files in wwwpublic
   file:
     src: "{{ item.file }}-{{ inventory_hostname }}.html"
     dest: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: link
+    force: true
   loop: "{{ migrid_static_html_links }}"
   when: migrid_static_html_links is defined
 
 - name: copy gdp_home/data_categories.json for sif
   copy:
-    src: manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json
+    src: "{{ migrid_copy_static_files_dat_src }}"
     dest: "{{ migrid_state_directory }}/gdp_home/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
@@ -75,7 +69,7 @@
 
 # - name: Copy index.html into wwwpublic
 #   copy:
-#     src: "manual/au-overlay/{{ ansible_hostname }}/html/index.html"
+#     src: "{{ migrid_overlay }}/{{ ansible_hostname }}/html/index.html"
 #     dest: "{{ migrid_state_directory }}/wwwpublic/"
 #     owner: "{{ migrid_user }}"
 #     group: "{{ migrid_user }}"
@@ -90,7 +84,7 @@
 
 - name: Copy pdf files
   copy:
-    src: manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}
+    src: "{{ migrid_copy_static_files_pdf_src }}"
     dest: "{{ migrid_state_directory }}/wwwpublic/"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

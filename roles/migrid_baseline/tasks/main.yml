@@ -13,6 +13,7 @@
     cmd: git config --global --add safe.directory {{ migrid_root }}
     chdir: "{{ migrid_root }}"
 
+  # fixme: code duplication: this is already done in migrid_pre_checks
 - name: Get infos on container
   community.docker.docker_container_info:
     name: migrid
@@ -24,21 +25,16 @@
   when: migrid_container.exists
 
 - name: Clone docker-migrid
+  become_user: "{{ migrid_adm }}"
+  become: true
   git:
     repo: "{{ migrid_docker_repository }}"
     dest: "{{ migrid_root }}"
     version: "{{ migrid_docker_repository_version | default('master') }}"
 
-- name: Change owner on all files
+- name: Link .env in migrid_root
   file:
-    path: "{{ migrid_root }}"
-    owner: "{{ migrid_adm }}"
-    group: "{{ migrid_adm }}"
-    recurse: true
-
-- name: Set .env
-  file:
-    src: "{{ migrid_au_overlay }}/{{ ansible_hostname }}/env"
+    src: "{{ migrid_baseline_env_src }}"
     dest: "{{ migrid_root }}/.env"
     state: link
     force: false

@@ -1,21 +1,21 @@
 ---
 # copies overlay files onto server. They are placed in a directory besides migrid
-- name: Create directory for au-overlay
+- name: Create directory for migrid-overlay
   file:
-    path: "{{ migrid_au_overlay }}"
+    path: "{{ migrid_overlay }}"
     owner: "{{ migrid_adm }}"
     group: "{{ migrid_adm }}"
     state: directory
     mode: "0755"
 
-- name: copy files from manual/au-overlay to server
+- name: copy overlay files to server
   synchronize:
     src: manual/au-overlay/{{ ansible_hostname }}/
-    dest: "{{ migrid_au_overlay }}/{{ ansible_hostname }}/"
+    dest: "{{ migrid_overlay }}/{{ ansible_hostname }}/"
 
 - name: Changer owner on all files
   file:
-    path: "{{ migrid_au_overlay }}"
+    path: "{{ migrid_overlay }}"
     owner: "{{ migrid_adm }}"
     group: "{{ migrid_adm }}"
     recurse: true

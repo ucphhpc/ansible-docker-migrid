@@ -25,12 +25,19 @@
   when: migrid_container.exists
 
 - name: Clone docker-migrid
-  become_user: "{{ migrid_adm }}"
-  become: true
+  #become_user: "{{ migrid_adm }}"
+  #become: true
   git:
     repo: "{{ migrid_docker_repository }}"
     dest: "{{ migrid_root }}"
     version: "{{ migrid_docker_repository_version | default('master') }}"
+
+- name: Changer owner on all files
+  file:
+    path: "{{migrid_root}}"
+    owner: "{{migrid_adm}}"
+    group: "{{migrid_adm}}"
+    recurse: true
 
 - name: Link .env in migrid_root
   file:

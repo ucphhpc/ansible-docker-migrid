@@ -10,8 +10,8 @@
 
 - name: copy overlay files to server
   synchronize:
-    src: manual/au-overlay/{{ ansible_hostname }}/
-    dest: "{{ migrid_overlay }}/{{ ansible_hostname }}/"
+    src: "{{ migrid_copy_overlay_files_src }}"
+    dest: "{{ migrid_copy_overlay_files_dest }}"
 
 - name: Changer owner on all files
   file:

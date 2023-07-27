@@ -20,12 +20,12 @@
 
 - name: Remove {{ migrid_root }}
   git:
-    path: "{{ migrid_root }}"
+    dest: "{{ migrid_root }}"
     repo: "{{ migrid_docker_repository }}"
     force: true
     update: true
     clone: false
-  when: 
+  when:
     - migrid_clean_git_reset == true
     - migrid_clean_remove_app_root == false
     - migrid_docker_repository is defined

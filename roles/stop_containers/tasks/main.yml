@@ -1,5 +1,14 @@
 ---
+- name: Check if docker-compose file is available
+  ansible.builtin.stat:
+    path: "{{ migrid_root }}/docker-compose.yml"
+    follow: true
+  changed_when: false
+  failed_when: false
+  register: docker_compose
+
 - name: Running docker-compose down
   community.docker.docker_compose:
     project_src: "{{ migrid_root }}"
     state: absent
+  when: docker_compose.stat.exists

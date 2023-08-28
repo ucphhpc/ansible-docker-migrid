@@ -4,7 +4,7 @@
 
 - name: Create directoris for certificates
   file:
-    path: "{{ migrid_certs }}/MiG/*{{ migrid_domain }}"
+    path: "{{ migrid_certs }}/MiG/*.{{ migrid_copy_cert_files_domain }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
     state: directory

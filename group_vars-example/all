@@ -23,10 +23,30 @@ migrid_docker_compose_preset: docker-compose_dev.erda.dk_full.yml          # lin
 migrid_docker_compose_file: docker-compose_dev.erda.dk_full.yml # needed ??
 migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
 #migrid_docker_repository_version:...      # use this to set the migrid-docker version, if not set it will get head.
+ 
 
 #to use upsate_status_html
 migrid_update_status_deploy_version: true   # if defined will update version
 migrid_update_status_subversion: true       # if defined will update subversion number
+
+#certificate links
+migrid_cert_dir_links:
+    - { src: "MiG/*", dest: "anon." }
+    - { src: "MiG/*", dest: "cert." }
+    - { src: "MiG/*", dest: "*" }
+    - { src: "MiG/*", dest: "ext." }
+    - { src: "MiG/*", dest: "int." }
+    - { src: "MiG/*", dest: "io." }
+    - { src: "MiG/*", dest: "www." }
+
+migrid_cert_file_links:
+    - { src: "MiG/*", dest: "cacert.pem" }
+    - { src: "MiG/*", dest: "combined.pem" }
+    - { src: "MiG/*", dest: "combined.pub" }
+    - { src: "MiG/*", dest: "crl.pem" }
+    - { src: "MiG/*", dest: "server.ca.pem" }
+    - { src: "MiG/*", dest: "server.crt" }
+    - { src: "MiG/*", dest: "server.key" } 
 
 #static files to be copied, dest=the migrid directory
 # will update if its defined, otherwise not.
@@ -73,3 +93,4 @@ promtail_ts_b: "+02:00"
 # Subnet information for the lustre-network role
 gc_data_subnet: ip-net-site-a
 sh_data_subnet: ip-net-site-b
+

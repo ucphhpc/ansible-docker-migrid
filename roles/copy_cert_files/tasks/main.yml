@@ -1,38 +1,35 @@
 ---
 # copy cert files into migrid_root directory
-# depends on migrid-baseline
+#depends on migrid-baseline
 
 - name: Create directoris for certificates
   file:
-    path: "{{ migrid_certs }}/MiG/*.{{ migrid_copy_cert_files_domain }}"
+    path: "{{ migrid_certs }}/MiG/*{{ inventory_hostname }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
     state: directory
     mode: "0755"
 
-- name: Copy files certs to server
+- name: copy files from manual/certs to server
   copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: manual/certs/{{ ansible_hostname }}/
+    dest: "{{ migrid_certs }}/MiG/*{{ inventory_hostname }}"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
     mode: "0400"
-    remote_src: "{{ migrid_copy_cert_files_remote_src | default(omit) }}"
-  loop: "{{ migrid_copy_cert_files }}"
-  when: migrid_copy_cert_files is iterable
 
-# relative symbolic links can be created by having a relative src
+#relative symbolic links can be created by having a relative src
 
 - name: Create symbolic links for directories
   file:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "{{ item.src }}{{ inventory_hostname }}"
+    dest: "{{ migrid_certs }}/{{ item.dest }}{{ inventory_hostname }}"
     state: link
   loop: "{{ migrid_cert_dir_links }}"
 
 - name: Create symbolic links for files
   file:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "{{ item.src }}{{ inventory_hostname }}/{{ item.dest }}"
+    dest: "{{ migrid_certs }}/{{ item.dest }}"
     state: link
   loop: "{{ migrid_cert_file_links }}"

@@ -1,1 +1,2 @@
 migrid_start_containers_profiles: []
+migrid_start_containers_recreate: "never"

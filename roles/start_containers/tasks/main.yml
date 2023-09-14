@@ -6,3 +6,4 @@
     project_src: "{{migrid_root}}"
     build: false
     profiles: "{{ migrid_start_containers_profiles }}"
+    recreate: "{{ migrid_start_containers_recreate }}"

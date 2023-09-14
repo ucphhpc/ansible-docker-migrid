@@ -13,17 +13,6 @@
     cmd: git config --global --add safe.directory {{ migrid_root }}
     chdir: "{{ migrid_root }}"
 
-# fixme: code duplication: this is already done in migrid_pre_checks
-- name: Get infos on container
-  community.docker.docker_container_info:
-    name: migrid
-  register: migrid_container
-
-- name: Check if migrid container exists
-  ansible.builtin.fail:
-    msg: MiGrid container already exists, cannot continue!
-  when: migrid_container.exists
-
 - name: Clone docker-migrid
   #become_user: "{{ migrid_adm }}"
   #become: true

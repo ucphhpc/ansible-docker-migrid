@@ -3,16 +3,9 @@
 #build containers, setup the rest for deployment
 # depends on migrid-baseline, startup-encrypt-state
 
-- name: Get infos on container
-  community.docker.docker_container_info:
-    name: migrid
-  register: migrid_container
-
-- name: Check if migrid container exists
-  fail:
-    msg: MiGrid container already exists, cannot continue!
-  when: migrid_container.exists
-
+# ---------------------------------------------------------------
+# This should be a seperate build role
+# ---------------------------------------------------------------
 - name: Run make clean to remove anything already built
   shell:
     cmd: make clean > make-clean.log 2>&1
@@ -23,6 +16,21 @@
   shell:
     cmd: make > make.log 2>&1
     chdir: "{{ migrid_root }}"
+# ---------------------------------------------------------------
+
+
+# ---------------------------------------------------------------
+# This should be a seperate populate directories role
+# ---------------------------------------------------------------
+- name: Get infos on container
+  community.docker.docker_container_info:
+    name: migrid
+  register: migrid_container
+
+- name: Check if migrid container exists
+  fail:
+    msg: MiGrid container already exists, cannot continue!
+  when: migrid_container.exists
 
 - name: Running docker-compose up
   community.docker.docker_compose:
@@ -40,6 +48,7 @@
     build: false
     state: absent
     stopped: true
+# ---------------------------------------------------------------
 
 - name: copy static html files for migrid
   copy:

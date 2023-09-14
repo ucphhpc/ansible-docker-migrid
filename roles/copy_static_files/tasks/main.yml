@@ -14,7 +14,7 @@
 #fixme: why does the build happen in copy_static_files
 - name: Run make to build MiGrid
   shell:
-    cmd: make > make.log 2>&1
+    cmd: make dockerbuild > make.log 2>&1
     chdir: "{{ migrid_root }}"
 # ---------------------------------------------------------------
 

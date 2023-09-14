@@ -58,17 +58,9 @@
     - migrid_docker_compose_preset is defined
     - migrid_docker_compose_custom is undefined
 
-- name: Copy custom docker-compose.yml
-  ansible.builtin.copy:
-    src: "{{ migrid_docker_compose_custom }}"
-    dest: "{{ migrid_root }}/"
-    owner: "{{ migrid_adm }}"
-    group: "{{ migrid_adm }}"
-  when: migrid_docker_compose_custom is defined
-
 - name: Link to custom docker-compose.yml
   ansible.builtin.file:
-    src: "{{ migrid_root }}/{{ migrid_docker_compose_custom | basename }}"
+    src: "{{ migrid_docker_compose_custom }}"
     dest: "{{ migrid_root }}/docker-compose.yml"
     state: link
     force: true

@@ -2,58 +2,47 @@
 # depends on migrid-users
 ---
 - name: Create directory for MiGrid
-  file:
+  ansible.builtin.file:
     path: "{{ migrid_root }}"
     owner: "{{ migrid_adm }}"
     group: "{{ migrid_adm }}"
     state: directory
 
 - name: Set safe.directory for {{ migrid_root }}
-  command:
+  ansible.builtin.command:
     cmd: git config --global --add safe.directory {{ migrid_root }}
     chdir: "{{ migrid_root }}"
-
-  # fixme: code duplication: this is already done in migrid_pre_checks
-- name: Get infos on container
-  community.docker.docker_container_info:
-    name: migrid
-  register: migrid_container
-
-- name: Check if migrid container exists
-  fail:
-    msg: MiGrid container already exists, cannot continue!
-  when: migrid_container.exists
 
 - name: Clone docker-migrid
   #become_user: "{{ migrid_adm }}"
   #become: true
-  git:
+  ansible.builtin.git:
     repo: "{{ migrid_docker_repository }}"
     dest: "{{ migrid_root }}"
     version: "{{ migrid_docker_repository_version | default('master') }}"
 
 - name: Changer owner on all files
-  file:
-    path: "{{migrid_root}}"
-    owner: "{{migrid_adm}}"
-    group: "{{migrid_adm}}"
+  ansible.builtin.file:
+    path: "{{ migrid_root }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
     recurse: true
 
 - name: Link .env in migrid_root
-  file:
+  ansible.builtin.file:
     src: "{{ migrid_baseline_env_src }}"
     dest: "{{ migrid_root }}/.env"
     state: link
     force: false
 
 - name: Set Dockerfile
-  file:
+  ansible.builtin.file:
     src: Dockerfile.{{ migrid_container_type }}
     dest: "{{ migrid_root }}/Dockerfile"
     state: link
 
 - name: Set docker-compose.override.yml
-  template:
+  ansible.builtin.template:
     src: docker-compose.override.yml.j2
     dest: "{{ migrid_root }}/docker-compose.override.yml"
     owner: "{{ migrid_adm }}"
@@ -61,7 +50,7 @@
   when: migrid_docker_compose_override is defined
 
 - name: Link to existing docker-compose.yml
-  file:
+  ansible.builtin.file:
     src: "{{ migrid_root }}/{{ migrid_docker_compose_preset }}"
     dest: "{{ migrid_root }}/docker-compose.yml"
     state: link
@@ -69,17 +58,9 @@
     - migrid_docker_compose_preset is defined
     - migrid_docker_compose_custom is undefined
 
-- name: Copy custom docker-compose.yml
-  copy:
-    src: "{{ migrid_docker_compose_custom }}"
-    dest: "{{ migrid_root }}/"
-    owner: "{{ migrid_adm }}"
-    group: "{{ migrid_adm }}"
-  when: migrid_docker_compose_custom is defined
-
 - name: Link to custom docker-compose.yml
-  file:
-    src: "{{ migrid_root }}/{{ migrid_docker_compose_custom | basename }}"
+  ansible.builtin.file:
+    src: "{{ migrid_docker_compose_custom }}"
     dest: "{{ migrid_root }}/docker-compose.yml"
     state: link
     force: true

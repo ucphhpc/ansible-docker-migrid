@@ -1,3 +1,7 @@
 ---
 # this should correspond to migrid_copy_overlay_files_dest
 migrid_baseline_env_src: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+
+# Set this to the full path of a custom docker-compose file
+# eg. one in the overlay folder
+# migrid_docker_compose_custom:

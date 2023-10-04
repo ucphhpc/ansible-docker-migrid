@@ -1,0 +1,16 @@
+---
+- name: run create user command in container
+  community.docker.docker_container_exec:
+    container: "{{ migrid_create_users_container }}"
+    argv:
+      - "./createuser.py"
+      - "{{ item.options | default('-r') }}"
+      - "{{ item.full_name}}"
+      - "{{ item.organization }}"
+      - "{{ item.state }}"
+      - "{{ item.country }}"
+      - "{{ item.email }}"
+      - "{{ item.comment | default ('created by Ansible') }}"
+      - "{{ item.password }}"
+    chdir: "/home/mig/mig/server"
+  loop: "{{ migrid_create_users }}"

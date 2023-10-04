@@ -1,0 +1,5 @@
+---
+migrid_create_users_container: migrid
+
+# A liste of users which shall be created
+migrid_create_users: []

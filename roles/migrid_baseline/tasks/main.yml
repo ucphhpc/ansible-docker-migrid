@@ -21,6 +21,15 @@
     dest: "{{ migrid_root }}"
     version: "{{ migrid_docker_repository_version | default('master') }}"
 
+- name: Changer owner on all files
+  ansible.builtin.file:
+    path: "{{ migrid_root }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
+    recurse: true
+    follow: "{{ migrid_baseline_chown_follow_symlinks }}"
+  when: migrid_baseline_chown
+
 - name: Link .env in migrid_root
   ansible.builtin.file:
     src: "{{ migrid_baseline_env_src }}"

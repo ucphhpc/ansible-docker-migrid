@@ -20,6 +20,7 @@
     repo: "{{ migrid_docker_repository }}"
     dest: "{{ migrid_root }}"
     version: "{{ migrid_docker_repository_version | default('master') }}"
+    force: true
 
 - name: Changer owner on all files
   ansible.builtin.file:

@@ -18,7 +18,7 @@
     state: absent
   when: migrid_clean_remove_overlay == true
 
-- name: Remove {{ migrid_root }}
+- name: Reset git repository {{ migrid_root }}
   git:
     dest: "{{ migrid_root }}"
     repo: "{{ migrid_docker_repository }}"

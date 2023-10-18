@@ -12,7 +12,6 @@
     comment: MiGrid User
     group: "{{ migrid_adm }}"
     shell: /bin/bash
-    # fixme: hardcoded userids are evil
     uid: "{{ migrid_adm_uid }}"
     password_lock: true
 

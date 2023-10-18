@@ -13,4 +13,5 @@
       - "{{ item.comment | default ('created by Ansible') }}"
       - "{{ item.password }}"
     chdir: "/home/mig/mig/server"
+    user: "{{ migrid_create_users_container_user }}"
   loop: "{{ migrid_create_users }}"

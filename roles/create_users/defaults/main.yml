@@ -1,5 +1,10 @@
 ---
+# The name of the container in which the user creation shall be done
 migrid_create_users_container: migrid
 
-# A liste of users which shall be created
+# The user inside the docker container as which the user creation
+# shall be done
+migrid_create_users_container_user: mig
+
+# A list of users which shall be created
 migrid_create_users: []

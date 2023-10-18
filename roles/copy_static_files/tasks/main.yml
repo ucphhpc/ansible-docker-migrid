@@ -34,6 +34,7 @@
 
 - name: Running docker-compose up
   community.docker.docker_compose:
+    profiles: "{{ migrid_start_containers_profiles | default(omit) }}"
     project_src: "{{ migrid_root }}"
     build: false
     recreate: always

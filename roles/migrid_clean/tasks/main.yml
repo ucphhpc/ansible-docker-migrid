@@ -1,6 +1,13 @@
 # clean up directories before doing anything is a good thing.. aah the fresh smell of clean :)
 ---
-# fixme: this should have checks as it can mean dataloss and downtime
+- name: Run make clean to remove anything already built
+  shell:
+    cmd: make clean > make-clean.log 2>&1
+    chdir: "{{ migrid_root }}"
+  when:
+    - migrid_clean_remove_app_root == false
+    - migrid_make_clean == true
+
 - name: Prune everything in docker
   community.docker.docker_prune:
     containers: true

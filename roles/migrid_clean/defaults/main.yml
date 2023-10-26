@@ -1,4 +1,7 @@
 ---
+# run `make clean` inside the docker-migrid repo
+migrid_make_clean: true
+
 # remove all docker images, volumes, build cache, etc.
 migrid_clean_docker_prune_all: true
 

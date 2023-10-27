@@ -1,0 +1,6 @@
+---
+- name: install RedHat prerequisits
+  yum:
+    name: "{{ migrid_redhat_prerequisites }}"
+    state: present
+  when: ansible_os_family == "RedHat"

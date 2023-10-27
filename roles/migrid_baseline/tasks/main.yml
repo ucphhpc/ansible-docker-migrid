@@ -52,14 +52,18 @@
     group: "{{ migrid_adm }}"
   when: migrid_docker_compose_override is defined
 
+- name: check for docker-compose file
+  assert:
+    that:
+      - migrid_docker_compose_preset is defined or migrid_docker_compose_custom is defined
+    fail_msg: "Either migrid_docker_compose_preset or migrid_docker_compose_custom must be specified"
+
 - name: Link to existing docker-compose.yml
   ansible.builtin.file:
     src: "{{ migrid_root }}/{{ migrid_docker_compose_preset }}"
     dest: "{{ migrid_root }}/docker-compose.yml"
     state: link
-  when:
-    - migrid_docker_compose_preset is defined
-    - migrid_docker_compose_custom is undefined
+  when: migrid_docker_compose_preset is defined
 
 - name: Link to custom docker-compose.yml
   ansible.builtin.file:
@@ -67,4 +71,6 @@
     dest: "{{ migrid_root }}/docker-compose.yml"
     state: link
     force: true
-  when: migrid_docker_compose_custom is defined
+  when:
+    - migrid_docker_compose_custom is defined
+    - migrid_docker_compose_preset is undefined

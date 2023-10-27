@@ -17,17 +17,3 @@
   set_fact:
     migrid_cipher_directory: /mnt/{{migrid_lustre_mount_point}}/{{ansible_hostname}}
   when: migrid_encrypt_state==true
-
-# - name: debug
-#   debug:
-#     msg:  "migrid state dir now {{migrid_state_directory}}"
-
-# - name: debug2
-#   debug:
-#     msg: "migrid cipher dir {{migrid_cipher_directory}}"
-
-- name: install RedHat prerequisits
-  yum:
-    name: "{{ migrid_redhat_prerequisites }}"
-    state: present
-  when: ansible_os_family == "RedHat"

@@ -13,3 +13,4 @@
     - copy_static_files
     - update_status_html
     - promtail_migrid
+    - migrid_logstash_gdp

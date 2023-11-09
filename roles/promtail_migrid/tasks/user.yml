@@ -1,0 +1,16 @@
+---
+#user has to exist also on mds lustre server
+- name: Add promtail group
+  group:
+    name: promtail
+    gid: "{{promtail_user_gid}}"
+    state: present
+
+- name: Add promtail users
+  user:
+    name: promtail
+    comment: promtail user
+    uid: "{{promtail_user_uid}}"
+    group: promtail
+    shell: /bin/bash
+    password_lock: true

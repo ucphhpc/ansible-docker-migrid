@@ -1,0 +1,33 @@
+# mangaged by ansible
+input {
+  file {
+    path => "{{migrid_state_directory}}/log/gdp.log"
+    sincedb_path => "{{migrid_state_directory}}/log/gdp.sincedb"
+    start_position => "beginning"
+  }
+}
+
+filter {
+  grok {
+    match => { "message" => "%{MONTH}%{SPACE}%{MONTHDAY} %{TIME} %{HOSTNAME:host2} %{HOSTNAME}\[%{NUMBER}\]: %{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:logType} : (.+)" }
+  }
+  date {
+    match => [ "timestamp", "ISO8601" ]
+    remove_field => [ "timestamp", "@version", "event", "[host][name]" ]
+    add_field => { "service" => "gdp" }
+  }
+  mutate {
+    rename => {
+      "host2" => "host"
+      "[log][file][path]" => "filename"
+    }
+  }
+}
+
+output {
+  loki {
+    url => "http://{{promtail_loki_server}}:3100/loki/api/v1/push"
+    retries => 8888
+    insecure_skip_verify => true
+  }
+}

@@ -43,7 +43,7 @@ scrape_configs:
         stages:
           - regex:
               source: filename
-              expression: '{{migrid_state_directory}}/log/(?P<service>\S+?).log'
+              expression: '{{migrid_state_directory}}/log/((gdp)|(?P<service>\S+?)).log'
           - labels:
               service:
     - match:

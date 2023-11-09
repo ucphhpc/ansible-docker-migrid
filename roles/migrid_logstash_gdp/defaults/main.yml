@@ -1,0 +1,12 @@
+---
+elastic_release: 8
+
+# the user that has access to r/w on the mds in lustre
+logstash_user: promtail
+
+logstash_config_autoreload: true
+## logstash_config_autoreload_interval: 3s
+logstash_config_path_data: /var/lib/logstash
+logstash_config_path_logs: /var/log/logstash
+## logstash_http_host: "127.0.0.1"
+## logstash_http_port: 9600-9700

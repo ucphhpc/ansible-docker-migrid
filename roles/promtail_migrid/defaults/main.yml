@@ -1,0 +1,4 @@
+---
+#uid and gid for user that has access mds in lustre
+promtail_user_gid: 1399
+promtail_user_uid: 1399

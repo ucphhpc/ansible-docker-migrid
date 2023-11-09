@@ -1,20 +1,8 @@
 ---
 # install promtail for sending logs to grafana loki
-#user has to exist also on mds lustre server
-- name: Add promtail group
-  group:
-    name: promtail
-    gid: 1399
-    state: present
-
-- name: Add promtail users
-  user:
-    name: promtail
-    comment: promtail user
-    uid: 1399
-    group: promtail
-    shell: /bin/bash
-    password_lock: true
+- name: Import user create task
+  import_tasks:
+    file: user.yml
 
 - name: Create position directory
   file:

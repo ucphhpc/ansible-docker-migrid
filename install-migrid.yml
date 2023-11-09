@@ -9,7 +9,7 @@
   roles:
     - setup_vars
     - migrid_pre_check
-    - stop_promtail
+    - stop_logging
     - umount_encrypt_state
     - migrid_logrotate
     - migrid_clean

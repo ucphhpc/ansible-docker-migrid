@@ -12,5 +12,5 @@
   roles:
     - setup_vars
     - startup_encrypt_state
-    - start_promtail
+    - start_logging
     - start_containers

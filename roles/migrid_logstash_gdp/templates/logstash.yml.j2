@@ -1,0 +1,12 @@
+path.data: {{ logstash_config_path_data }}
+config.reload.automatic: {{ logstash_config_autoreload | lower }}
+{% if logstash_config_autoreload | bool and logstash_config_autoreload_interval is defined %}
+config.reload.interval: {{ logstash_config_autoreload_interval }}
+{% endif %}
+path.logs: {{ logstash_config_path_logs }}
+{% if logstash_http_host is defined %}
+http.host: {{ logstash_http_host }}
+{% if logstash_http_port is defined %}
+http.port: {{ logstash_http_port }}
+{% endif %}
+{% endif %}

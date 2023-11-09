@@ -1,0 +1,11 @@
+---
+- name: stop promtail
+  systemd:
+    name: promtail
+    state: stopped
+
+- name: Enable logstash
+  systemd:
+    name: logstash
+    state: stopped
+  when: '"sif" in group_names'

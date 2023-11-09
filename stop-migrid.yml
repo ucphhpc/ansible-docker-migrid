@@ -12,5 +12,5 @@
   roles:
     - setup_vars
     - stop_containers
-    - stop_promtail
+    - stop_logging
     - umount_encrypt_state

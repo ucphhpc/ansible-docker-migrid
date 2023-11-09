@@ -2,3 +2,4 @@
 roles:
 collections:
   - name: community.docker
+  - name: community.general

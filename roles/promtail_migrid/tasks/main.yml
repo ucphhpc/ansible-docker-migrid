@@ -12,10 +12,11 @@
     mode: "0755"
     state: directory
 
-- name: install Promtail
+- name: install Promtail (debian)
   apt:
     deb: https://github.com/grafana/loki/releases/download/v{{promtail_version}}/promtail_{{promtail_version}}_amd64.deb
   notify: restart-promtail
+  when: ansible_os_family == "Debian"
 
 - name: Copy configuration file
   template:
@@ -27,4 +28,4 @@
   systemd:
     name: promtail
     enabled: true
-    state: started
+    state: stopped

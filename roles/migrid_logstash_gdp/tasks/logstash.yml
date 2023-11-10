@@ -11,20 +11,24 @@
   import_tasks:
     file: ../../promtail_migrid/tasks/user.yml
 
+#FIXME: redhat version of getting logstash
 - name: Ensure Elastic keys are available
   apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
+  when: ansible_os_family == "Debian"
 
 - name: Install Elastic OSS repo
   apt_repository:
-    repo: deb https://artifacts.elastic.co/packages/oss-{{ elastic_release }}.x/apt stable main
+    repo: deb https://artifacts.elastic.co/packages/oss-{{ migrid_elastic_release }}.x/apt stable main
+  when: ansible_os_family == "Debian"
 
 - name: Install logstash - debian
   apt:
     name: logstash-oss
     state: present
     update_cache: yes
+  when: ansible_os_family == "Debian"
 
 - name: Install logstash-output-loki
   community.general.logstash_plugin:

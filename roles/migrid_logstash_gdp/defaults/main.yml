@@ -1,5 +1,5 @@
 ---
-elastic_release: 8
+migrid_elastic_release: 8
 
 # the user that has access to r/w on the mds in lustre
 logstash_user: promtail

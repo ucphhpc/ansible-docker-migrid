@@ -8,4 +8,4 @@
   systemd:
     name: logstash
     state: stopped
-  when: '"sif" in group_names'
+  when: migrid_base_type == "sif"

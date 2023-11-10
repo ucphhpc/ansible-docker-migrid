@@ -3,4 +3,4 @@
 - name: Import logstash task if needed
   import_tasks:
     file: logstash.yml
-  when: '"sif" in group_names'
+  when: migrid_base_type == "sif"

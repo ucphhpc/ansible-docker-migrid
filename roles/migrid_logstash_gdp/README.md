@@ -2,7 +2,7 @@
 
 This role installs logstash onto a SiF server.
 
-It will select SiF if you have defined it as a group_name in inventory.yml. 
+It will select SiF if you have defined it as a group_name in inventory.yml. Ansible code uses ```migrid_base_type``` variable to determine this.
 
 Example:
 ```

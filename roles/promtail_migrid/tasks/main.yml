@@ -27,5 +27,5 @@
 - name: Enable Promtail
   systemd:
     name: promtail
-    enabled: true
+    enabled: false
     state: stopped

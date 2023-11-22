@@ -27,7 +27,7 @@
 - name: Enable logrotate (Debian)
   systemd:
     name: logrotate
-    enabled: true
+    enabled: false
     state: started
   when: ansible_os_family == "Debian"
 

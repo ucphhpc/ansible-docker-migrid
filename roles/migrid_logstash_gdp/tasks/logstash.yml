@@ -91,5 +91,5 @@
 - name: Enable logstash
   systemd:
     name: logstash
-    enabled: true
+    enabled: false
     state: stopped

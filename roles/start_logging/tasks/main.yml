@@ -4,7 +4,7 @@
     name: promtail
     state: started
 
-- name: Enable logstash
+- name: start logstash
   systemd:
     name: logstash
     state: started

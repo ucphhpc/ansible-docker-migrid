@@ -24,7 +24,7 @@
     dest: /etc/promtail/config.yml
   notify: restart-promtail
 
-- name: Enable Promtail
+- name: Setup Promtail in disabled state
   systemd:
     name: promtail
     enabled: false

@@ -15,14 +15,14 @@
 - name: install Promtail (debian)
   apt:
     deb: https://github.com/grafana/loki/releases/download/v{{promtail_version}}/promtail_{{promtail_version}}_amd64.deb
-  notify: restart-promtail
+  notify: stop-promtail
   when: ansible_os_family == "Debian"
 
 - name: Copy configuration file
   template:
     src: config.yml.j2
     dest: /etc/promtail/config.yml
-  notify: restart-promtail
+  notify: stop-promtail
 
 - name: Setup Promtail in disabled state
   systemd:

@@ -1,5 +1,5 @@
 ---
-- name: restart-promtail
+- name: stop-promtail
   service:
     name: promtail
     state: stopped

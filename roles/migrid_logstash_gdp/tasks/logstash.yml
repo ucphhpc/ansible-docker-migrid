@@ -40,14 +40,14 @@
     path: /lib/systemd/system/logstash.service
     regexp: '^User='
     line: "User={{logstash_user}}"
-  #notify: restart-logstash
+  notify: restart-logstash
 
 - name: Set the group for logstash during execution
   ansible.builtin.lineinfile:
     path: /lib/systemd/system/logstash.service
     regexp: '^Group='
     line: "Group={{logstash_user}}"
-  #notify: restart-logstash
+  notify: restart-logstash
 
 - name: Ensure all files are owned by {{logstash_user}} in {{logstash_config_path_logs}}
   file:
@@ -77,7 +77,7 @@
     owner: root
     group: root
     mode: 0644
-  #notify: restart-logstash
+  notify: restart-logstash
 
 - name: Copy migrid-gdp-log.conf to pipeline configuration catalog for logstash
   template:
@@ -86,7 +86,7 @@
     owner: root
     group: root
     mode: 0644
-  #notify: restart-logstash
+  notify: restart-logstash
 
 - name: Setup logstash in disabled state
   systemd:

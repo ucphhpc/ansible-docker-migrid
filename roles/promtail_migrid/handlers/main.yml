@@ -2,5 +2,5 @@
 - name: restart-promtail
   service:
     name: promtail
-    state: restarted
+    state: stopped
     daemon_reload: true

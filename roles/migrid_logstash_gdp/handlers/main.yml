@@ -2,5 +2,5 @@
 - name: restart-logstash
   service:
     name: logstash
-    state: restarted
+    state: stopped
     daemon_reload: true

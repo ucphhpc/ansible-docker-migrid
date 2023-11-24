@@ -2,6 +2,11 @@
 # this should correspond to migrid_copy_overlay_files_dest
 migrid_baseline_env_src: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
 
+# the filename of the template used as docker-compose override file
+# to use a override file the `migrid_docker_compose_override` must be true
+migrid_docker_compose_override_src: docker-compose.override.au.yml.j2
+migrid_docker_compose_override: true
+
 # Set this to the full path of a custom docker-compose file
 # eg. one in the overlay folder
 # migrid_docker_compose_custom:

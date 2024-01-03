@@ -46,13 +46,13 @@
 
 - name: Set docker-compose.override.yml
   ansible.builtin.template:
-    src: docker-compose.override.yml.j2
+    src: "{{ migrid_docker_compose_override_src }}"
     dest: "{{ migrid_root }}/docker-compose.override.yml"
     owner: "{{ migrid_adm }}"
     group: "{{ migrid_adm }}"
-  when: migrid_docker_compose_override is defined
+  when: migrid_docker_compose_override
 
-- name: check for docker-compose file
+- name: check for docker-compose preset or custom variable
   assert:
     that:
       - migrid_docker_compose_preset is defined or migrid_docker_compose_custom is defined

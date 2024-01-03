@@ -1,0 +1,26 @@
+# {{ ansible_managed }}
+
+version: '3.7'
+services:
+  migrid:
+    profiles:
+      - migrid
+      - migrid-webdavs
+      - migrid-ftps
+      - migrid-sftp
+      - migrid-openid
+  migrid-openid:
+    profiles:
+      - migrid-openid
+  migrid-webdavs:
+    profiles:
+      - migrid-webdavs
+  migrid-ftps:
+    profiles:
+      - migrid-ftps
+  migrid-sftp:
+    # not supported by docker-compose V1
+    # https://github.com/ansible-collections/community.docker/issues/710
+    # depends_on: !reset []
+    profiles:
+      - migrid-sftp

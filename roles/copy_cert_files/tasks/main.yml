@@ -2,6 +2,15 @@
 # copy cert files into migrid_root directory
 # depends on migrid-baseline
 
+# If certs is set to external directory, link it into the docker-migrid directory
+- name: Link cert to external directory
+
+  file:
+    src: "{{ migrid_certs }}"
+    dest: "{{ migrid_root }}/certs"
+    state: link
+  when: not migrid_certs is search(migrid_root)
+
 - name: Create directoris for certificates
   file:
     path: "{{ migrid_certs }}/MiG/*.{{ migrid_copy_cert_files_domain }}"

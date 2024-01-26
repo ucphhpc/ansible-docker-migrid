@@ -1,6 +1,8 @@
-# Migrid create\_users
+# Migrid create\_static\_users
 
 This roles creates static users inside a MiGrid installation.
+
+For user creation on the Migrid host system see [migrid\_users](../migrid_users/).
 
 It works by calling the usercreate.py inside a running migrid container similar to the way the docker-entry.sh does.
 Eg. `createuser.py [OPTIONS] [FULL_NAME ORGANIZATION STATE COUNTRY EMAIL COMMENT PASSWORD]`
@@ -8,7 +10,7 @@ Eg. `createuser.py [OPTIONS] [FULL_NAME ORGANIZATION STATE COUNTRY EMAIL COMMENT
 # Role Variables
 
 ```
-migrid_create_users:
+migrid_create_static_users:
  - options: -r # (this is the default, overwrite the user information)
    full_name: Foo Bar
    organization: Org42

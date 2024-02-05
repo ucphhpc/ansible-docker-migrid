@@ -34,6 +34,24 @@
     ansible_docker_migrid_version: "{{ { 'ansible_docker_migrid_version' : result.stdout } }}"
   when: result.rc==0
 
+- name: register dockerfile version
+  set_fact:
+    ansible_dockerfile_version: "{{ { 'dockerfile_version' : migrid_container_type } }}"
+
+- name: register docker-migrid repository version
+  set_fact:
+    ansible_docker_migrid_repository_version: "{{ { ansible_docker_migrid_repository_version : migrid_docker_repository_version | default('master') } }}"
+
+- name: get openidc version
+  shell:
+    cmd: "docker exec -it migrid rpm -q mod_auth_openidc"
+    chdir: "{{ migrid_root }}"
+  register: result
+
+- name: register openid version
+  set_fact:
+    ansible_openidc_version: "{{ { ansible_openidc_version : result.stdout } }}"
+
 #
 # get values from env file
 #
@@ -91,7 +109,7 @@
 
 - name: update status.html
   copy:
-    content: "{{ deploy_local_version | combine(ansible_docker_migrid_version) | combine(migrid_git_rev) | combine(migrid_with_git) | combine(migrid_git_branch) | combine(migrid_perfer_python3) | combine(migrid_enable_gdp) | to_json }}"
+    content: "{{ deploy_local_version | combine(ansible_docker_migrid_version) | combine(ansible_dockerfile_version) | combine(ansible_docker_migrid_repository_version) | combine(ansible_openidc_version) | combine(migrid_git_rev) | combine(migrid_with_git) | combine(migrid_git_branch) | combine(migrid_perfer_python3) | combine(migrid_enable_gdp) | to_json }}"
     dest: "{{ migrid_state_directory }}/wwwpublic/status.html"
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"

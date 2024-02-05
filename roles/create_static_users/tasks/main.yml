@@ -4,7 +4,7 @@
     container: "{{ migrid_create_users_container }}"
     argv:
       - "./createuser.py"
-      - "{{ item.options | default('-r') }}"
+      - "-v {{ item.options | default('-r') }}"
       - "{{ item.full_name}}"
       - "{{ item.organization }}"
       - "{{ item.state }}"

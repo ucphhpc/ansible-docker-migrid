@@ -38,9 +38,14 @@
   set_fact:
     ansible_dockerfile_version: "{{ { 'dockerfile_version' : migrid_container_type } }}"
 
+- name: register migric docker repository version variable
+  set_fact:
+    the_version_is: "{{ migrid_docker_repository_version | default('master') }}" 
+
+
 - name: register docker-migrid repository version
   set_fact:
-    ansible_docker_migrid_repository_version: "{{ { ansible_docker_migrid_repository_version : migrid_docker_repository_version | default('master') } }}"
+    ansible_docker_migrid_repository_version: "{{ { ansible_docker_migrid_repository_version : the_version_is } }}"
 
 - name: get openidc version
   shell:

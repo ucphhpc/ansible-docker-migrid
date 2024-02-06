@@ -44,7 +44,7 @@
 
 - name: get openidc version
   shell:
-    cmd: "docker exec -it migrid rpm -q mod_auth_openidc"
+    cmd: "docker exec migrid rpm -q mod_auth_openidc"
     chdir: "{{ migrid_root }}"
   register: result
 

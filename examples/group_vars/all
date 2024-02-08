@@ -22,6 +22,7 @@ migrid_decrypt_dir: decrypt_state           # this is the state directory name w
 migrid_docker_compose_preset: docker-compose_production.yml # link docker-compose to existing compose file if defined. Otherwise you will have to set migrid_docker_compose_custom to what you want to use.
 migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
 #migrid_docker_repository_version:...      # use this to set the migrid-docker version, if not set it will get head.
+migrid_record_number_email_notification: false    # Setup record number email notification for all servers
 
 #to use upsate_status_html
 migrid_update_status_deploy_version: true   # if defined will update version

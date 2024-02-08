@@ -1,0 +1,3 @@
+---
+
+migrid_copy_record_number_email_notification_file: "manual/au-overlay/{{ ansible_hostname }}/files/notifyemails.txt"

@@ -42,11 +42,38 @@
   set_fact:
     ansible_docker_migrid_repository_version: "{{ { 'ansible_docker_migrid_repository_version' : migrid_docker_repository_version | default('master') } }}"
 
+#do container check and start
+- name: Get infos on container
+  community.docker.docker_container_info:
+    name: migrid
+  register: migrid_container
+
+- name: Running docker-compose up if needed
+  community.docker.docker_compose:
+    profiles: "{{ migrid_start_containers_profiles | default(omit) }}"
+    project_src: "{{ migrid_root }}"
+    services:
+      - migrid
+    build: false
+    recreate: always
+  when: not migrid_container.exists
+
 - name: get openidc version
   shell:
     cmd: "docker exec migrid rpm -q mod_auth_openidc"
     chdir: "{{ migrid_root }}"
   register: result
+
+#stop container again
+- name: Stopping containers if it was not already started before this role
+  community.docker.docker_compose:
+    project_src: "{{ migrid_root }}"
+    services:
+      - migrid
+    build: false
+    state: absent
+    stopped: true
+  when: not migrid_container.exists
 
 - name: register openid version
   set_fact:

@@ -42,7 +42,10 @@
   set_fact:
     ansible_docker_migrid_repository_version: "{{ { 'ansible_docker_migrid_repository_version' : migrid_docker_repository_version | default('master') } }}"
 
+#-------------------------------
 #do container check and start
+#FIXME: Can we do container check, start and stop a better way?
+#-------------------------------
 - name: Get infos on container
   community.docker.docker_container_info:
     name: migrid
@@ -64,7 +67,9 @@
     chdir: "{{ migrid_root }}"
   register: result
 
+#-------------------------------
 #stop container again
+#-------------------------------
 - name: Stopping containers if it was not already started before this role
   community.docker.docker_compose:
     project_src: "{{ migrid_root }}"

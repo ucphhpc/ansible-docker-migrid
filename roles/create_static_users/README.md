@@ -11,7 +11,7 @@ Eg. `createuser.py [OPTIONS] [FULL_NAME ORGANIZATION STATE COUNTRY EMAIL COMMENT
 
 ```
 migrid_create_static_users:
- - options: -r # (this is the default, overwrite the user information)
+ - options: -r # override the user infos an password
    full_name: Foo Bar
    organization: Org42
    state: Baz
@@ -22,7 +22,7 @@ migrid_create_static_users:
 
 see also [defaults/main.yml](./defaults/main.yml)
 
-If you don't want the user to be overwritten you have to set `options: ""`.
+If `-r` is not given and the user already exists, this role will report an error.
 
 Dependencies
 ------------

@@ -32,8 +32,11 @@
     group: "{{ migrid_user }}"
     state: directory
     mode: "0755"
+# NOTE: the migrid state link, will not be created for encrypted goencrypt setup,
+# because it will be mounted directly on the above directory
 
 # encryption stuff
+# this is the directory where the encrypted files are
 - name: Create migrid_cipher_directory ({{ migrid_cipher_directory }})
   file:
     path: "{{ migrid_cipher_directory }}"
@@ -44,6 +47,8 @@
   when: migrid_encrypt_state==true
 
 # non encryption stuff
+# this is for humans only!
+# DO NOT USE THIS FOR PROGRAMS, use migrid_state_directory
 - name: Create link from migrid state to migrid_connect_lustre_state_link ({{ migrid_connect_lustre_state_link }})
   file:
     src: "{{ migrid_state_directory }}"

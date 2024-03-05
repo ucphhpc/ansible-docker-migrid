@@ -49,6 +49,23 @@ Another way is to use collections in the playbook, like this example of start-mi
     - start_containers    
 ```
 
+Typical usage would be:
+
+* First run ```ansible-galaxy install -f -r requirements.yml```
+* Make sure system is stopped and mountpoints are unmounted: ```ansible-playbook -i inventory.yml -l host.example.com stop-migrid.yml```
+* Now run the installation: ```ansible-playbook --ask-vault-pass -i inventory.yml -l host.example.com install-migrid.yml```
+* Last start migrid: ```ansible-playbook --ask-vault-pass -i inventory.yml -l host.example.com start-migrid.yml```
+
+You only need ```--ask-vault-pass``` option on start-migrid.yml if you use encrypted state directory.
+
+Example of a ansible.cfg:
+```
+[defaults]
+collections_paths = ./collections/ansible_collections
+[ssh_connection]
+pipelining = True
+```
+
 ## Linting
 
 To make the codebase clean, you can use `ansible-lint` to apply certain standards. A good example is using the `shared` profile.

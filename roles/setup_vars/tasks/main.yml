@@ -10,7 +10,7 @@
 
 - name: Setup state directory pointer for encryption
   set_fact:
-    migrid_state_directory: "{{migrid_root}}/{{migrid_decrypt_dir}}"
+    migrid_state_directory: "{{migrid_decrypted_directory}}/{{migrid_decrypt_dir}}"
   when: migrid_encrypt_state==true
 
 - name: Set cipher directory for goencrypt

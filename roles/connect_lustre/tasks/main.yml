@@ -46,7 +46,6 @@
     mode: "0755"
   when: migrid_encrypt_state==true
 
-# non encryption stuff
 # this is for humans only!
 # DO NOT USE THIS FOR PROGRAMS, use migrid_state_directory
 - name: Create link from migrid state to migrid_connect_lustre_state_link ({{ migrid_connect_lustre_state_link }})
@@ -54,4 +53,3 @@
     src: "{{ migrid_state_directory }}"
     dest: "{{ migrid_root }}/{{ migrid_connect_lustre_state_link }}"
     state: link
-  when: migrid_encrypt_state==false

@@ -11,6 +11,7 @@
     msg: "{{migrid_cipher_directory}}/gocryptfs.conf exist skipping create fs"
   when: migrid_encrypt_state==true and st.stat.exists==true
 
+# This will only run if gocryptfs is not configured
 - name: Import encryption task if needed
   import_tasks:
     file: encrypt.yml

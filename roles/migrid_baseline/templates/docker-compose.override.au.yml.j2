@@ -9,21 +9,37 @@ services:
       - type: volume
         source: state
         target: /home/mig/state
+      - type: volume
+        source: vgrid_files_readonly
+        target: /home/mig/state/vgrid_files_readonly
+        read_only: true
   migrid-sftp:
     volumes:
       - type: volume
         source: state
         target: /home/mig/state
+      - type: volume
+        source: vgrid_files_readonly
+        target: /home/mig/state/vgrid_files_readonly
+        read_only: true
   migrid-ftps:
     volumes:
       - type: volume
         source: state
         target: /home/mig/state
+      - type: volume
+        source: vgrid_files_readonly
+        target: /home/mig/state/vgrid_files_readonly
+        read_only: true
   migrid-webdavs:
     volumes:
       - type: volume
         source: state
         target: /home/mig/state
+      - type: volume
+        source: vgrid_files_readonly
+        target: /home/mig/state/vgrid_files_readonly
+        read_only: true
   migrid-openid:
     volumes:
       - type: volume
@@ -36,3 +52,10 @@ volumes:
       type: none
       device: {{migrid_state_directory}}
       o: bind
+
+  vgrid_files_readonly:
+    driver: local
+    driver_opts:
+      type: none
+      device: {{migrid_state_directory}}/vgrid_files_writable
+      o: "bind, ro"

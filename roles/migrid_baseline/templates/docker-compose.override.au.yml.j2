@@ -10,7 +10,7 @@ services:
         source: state
         target: /home/mig/state
       - type: volume
-        source: state-ro
+        source: vgrid_files_readonly
         target: /home/mig/state/vgrid_files_readonly
         read_only: true
   migrid-sftp:
@@ -19,7 +19,7 @@ services:
         source: state
         target: /home/mig/state
       - type: volume
-        source: state-ro
+        source: vgrid_files_readonly
         target: /home/mig/state/vgrid_files_readonly
         read_only: true
   migrid-ftps:
@@ -28,7 +28,7 @@ services:
         source: state
         target: /home/mig/state
       - type: volume
-        source: state-ro
+        source: vgrid_files_readonly
         target: /home/mig/state/vgrid_files_readonly
         read_only: true
   migrid-webdavs:
@@ -37,7 +37,7 @@ services:
         source: state
         target: /home/mig/state
       - type: volume
-        source: state-ro
+        source: vgrid_files_readonly
         target: /home/mig/state/vgrid_files_readonly
         read_only: true
   migrid-openid:

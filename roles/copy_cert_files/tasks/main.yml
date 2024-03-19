@@ -55,7 +55,7 @@
     group: "{{ migrid_adm }}"
     state: directory
     mode: "0755"
-  when: migrid_docker_compose_override==true
+  when: migrid_selfsigned_certificates==true
 
 - name: Copy selfsigned certificate if needed
   copy:
@@ -64,4 +64,4 @@
     owner: "{{ migrid_user }}"
     group: "{{ migrid_user }}"
     mode: "0400"
-  when: migrid_docker_compose_override==true
+  when: migrid_selfsigned_certificates==true

@@ -29,6 +29,10 @@ migrid_record_number_email_notification: false    # Setup record number email no
 migrid_update_status_deploy_version: true   # if defined will update version
 migrid_update_status_subversion: true       # if defined will update subversion number
 
+migrid_selfsigned_certificates: false       # if a server has selfsigned certificates that need to be loaded into docker container.
+migrid_selfsigned_cert_file: server.ca.pem  #if server has selfsigned certificate, then specify what file to load into external-certificates/ directory.
+    # here we use the root ca for web to be loaded.
+
 #static files to be copied, dest=the migrid directory
 # will update if its defined, otherwise not.
 migrid_static_html_files:

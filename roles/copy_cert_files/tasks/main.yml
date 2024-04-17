@@ -45,3 +45,23 @@
     dest: "{{ item.dest }}"
     state: link
   loop: "{{ migrid_cert_file_links }}"
+
+# copy selfsigned root certificate to external-certificates/
+
+- name: Create directory for external-certificates/ if needed
+  file:
+    path: "{{ migrid_root }}/external-certificates"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
+    state: directory
+    mode: "0755"
+  when: migrid_selfsigned_certificates==true
+
+- name: Copy selfsigned certificate if needed
+  copy:
+    src: "{{migrid_selfsigned_cert_file}}"
+    dest: "{{ migrid_root }}/external-certificates/{{migrid_selfsigned_cert_file | basename }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+    mode: "0400"
+  when: migrid_selfsigned_certificates==true

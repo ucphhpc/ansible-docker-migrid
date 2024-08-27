@@ -1,0 +1,2 @@
+---
+migrid_copy_email_notifications_dir: "manual/au-overlay/{{ ansible_hostname }}/files/gdp"

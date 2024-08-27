@@ -1,6 +1,8 @@
 ---
 # check if directory migrid_copy_email_notifications_dir exists
 - name: Check if migrid_copy_email_notifications_dir already exists
+  delegate_to: localhost
+  become: false
   stat:
     path: "{{migrid_copy_email_notifications_dir}}"
   register: st

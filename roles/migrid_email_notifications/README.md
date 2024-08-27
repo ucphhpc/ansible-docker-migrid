@@ -1,6 +1,6 @@
 # Migrid email notifications
 
-This role will setting email notification files that are located under gdp_home. Alle files in ```migrid_copy_email_notifications_dir``` will be copied to gdp_home if the directory exist.
+This role will copy email notification files that are located under gdp_home. Alle files in ```migrid_copy_email_notifications_dir``` will be copied to gdp_home if the local directory exist.
 
 There are several files that can set email notifications.
 

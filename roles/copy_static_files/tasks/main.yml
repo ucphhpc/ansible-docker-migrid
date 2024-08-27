@@ -64,21 +64,6 @@
   loop: "{{ migrid_static_html_links }}"
   when: migrid_static_html_links is defined
 
-- name: copy gdp_home/data_categories.json for sif
-  copy:
-    src: "{{ migrid_copy_static_files_dat_src }}"
-    dest: "{{ migrid_state_directory }}/gdp_home/"
-    owner: "{{ migrid_user }}"
-    group: "{{ migrid_user }}"
-  when: migrid_base_type == "sif"
-
-# - name: Copy index.html into wwwpublic
-#   copy:
-#     src: "{{ migrid_overlay }}/{{ ansible_hostname }}/html/index.html"
-#     dest: "{{ migrid_state_directory }}/wwwpublic/"
-#     owner: "{{ migrid_user }}"
-#     group: "{{ migrid_user }}"
-#
 - name: Copy dhparams.pem into certs/
   copy:
     src: "{{ migrid_root }}/httpd/MiG-certificates/dhparams.pem"

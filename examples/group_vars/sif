@@ -9,9 +9,6 @@ migrid_base_type: sif
 #this will set what lustre mountpoint is used
 migrid_lustre_mount_point: sif-site-a
 
-#setup record number email notification for all sif servers
-#migrid_record_number_email_notification: true
-
 #pdf files to be staged in state/wwwpublic
 # if not defined it will not be copied
 migrid_pdf_files:

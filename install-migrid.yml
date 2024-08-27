@@ -23,7 +23,7 @@
     - startup_encrypt_state
       # here is last stop before make will run in next role
     - copy_static_files
-    - migrid_record_number_notification
+    - migrid_email_notifications
     - update_status_html
     - promtail_migrid
     - migrid_logstash_gdp

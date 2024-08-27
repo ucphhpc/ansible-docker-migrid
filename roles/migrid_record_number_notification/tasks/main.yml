@@ -1,7 +1,0 @@
----
-
-# only activete this role if migrid_record_number_email_notification is true
-- name: Import record number notification if needed
-  import_tasks:
-    file: notification.yml
-  when: migrid_record_number_email_notification

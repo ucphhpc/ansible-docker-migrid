@@ -1,0 +1,15 @@
+---
+
+# copy email notifications files
+
+- name: copy email notification files to server
+  synchronize:
+    src: "{{ migrid_copy_email_notifications_dir }}/"
+    dest: "{{ migrid_state_directory }}/gdp_home/"
+
+- name: Changer owner on all files
+  file:
+    path: "{{ migrid_state_directory }}/gdp_home/"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+    recurse: true

@@ -1,3 +1,8 @@
 ---
-# default from AU
-configure_lustre_lnet_networks: tcp1(ens224),tcp2(ens256)
+# Setup lustre network depending on the type of server. This is to differentiate between the different network settings
+#
+# product_name is the fact you get from ansible_facts.product_name
+# The default example below is taken fron the AU default.
+configure_lustre_lnet_networks:
+    - { product_name: "VMware Virtual Platform", net: "tcp1(ens224),tcp2(ens256)" }
+    #- { product_name: "PowerEdge xxxx", net: "tcp1(eth1),tcp2(eth2)" }

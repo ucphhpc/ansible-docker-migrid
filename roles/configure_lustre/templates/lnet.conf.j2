@@ -1,1 +1,1 @@
-options lnet networks="{{ configure_lustre_lnet_networks }}"
+options lnet networks="{{ (configure_lustre_lnet_networks | selectattr('product_name','==', ansible_facts.product_name) | map(attribute='net'))[-1] }}"

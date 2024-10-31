@@ -1,8 +1,8 @@
 ---
 
 #this sets the uid/gid running inside containers
-migrid_uid: 1203
-migrid_gid: 1203
+migrid_user_uid: 1203
+migrid_user_gid: 1203
 
 # Encrypt this server's state directory
 migrid_encrypt_state: true

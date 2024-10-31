@@ -18,6 +18,14 @@
   notify: stop-promtail
   when: ansible_os_family == "Debian"
 
+- name: Install Promtail (RedHat)
+  dnf:
+    name: https://github.com/grafana/loki/releases/download/v{{promtail_version}}/promtail-{{promtail_version}}.x86_64.rpm
+    state: present
+    disable_gpg_check: true
+  notify: stop-promtail
+  when: ansible_os_family == 'RedHat'
+
 - name: Copy configuration file
   template:
     src: config.yml.j2

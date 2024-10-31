@@ -1,5 +1,5 @@
 ---
 
 #this sets the uid/gid running inside containers
-migrid_uid: 1201
-migrid_gid: 1201
+migrid_user_uid: 1201
+migrid_user_gid: 1201

@@ -1,0 +1,3 @@
+- name: "Build the repo: {{ docker_migrid_repo.name }}"
+  make:
+    chdir: "/opt/{{ docker_migrid_repo.name }}"

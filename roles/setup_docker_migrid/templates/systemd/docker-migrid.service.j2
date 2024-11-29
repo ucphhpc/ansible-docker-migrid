@@ -1,0 +1,21 @@
+# /etc/systemd/system/{{ name }}.service
+
+[Unit]
+Description={{ name }} Service
+Requires={{ container_manager }}.service
+After={{ container_manager }}.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory={{ working_dir }}
+ExecStartPre={{ pre_start_command }}
+ExecStart={{ start_command }}
+ExecStop={{ stop_command }}
+Environment="PWD={{ working_dir }}"
+TimeoutStartSec=0
+User={{ user }}
+Group={{ group }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,285 @@
+# Which docker-migrid version to use
+docker_migrid_version: v1.0.11
+
+# Optional migrid-ucph-sites git version to pull in status-events.json from
+#migrid_ucph_sites_version: 
+
+# Which dockerfile to use when building the docker-migrid container
+docker_migrid_dockerfile: Dockerfile.rocky9
+
+# Where to stage the source clones to install from
+install_staging_root: "/var/tmp"
+
+# Where to install the docker-migrid clone
+docker_migrid_install_base: "{{ migrid_root }} | default('/opt/docker-migrid')"
+
+docker_migrid_repo:
+  container_manager: "{{ container_manager | default('docker') }}"
+  name: docker-migrid
+  url: https://github.com/ucphhpc/docker-migrid
+  version: "{{ docker_migrid_version | default('HEAD') }}"
+  pre_start_command: make init
+  start_command: make up
+  stop_command: make down
+
+# The publicly facing fqdn that the docker-migrid container will be accessible at / exposed as.
+# Override this in your group_vars or host_vars to set the fqdn that the migrid container will be accessible at.
+docker_migrid_fqdn: migrid.test
+
+# Default user IDs inside container - please note that they are overriden when deployed
+# with the services/migrid-server.yml to prevent clash with existing automatic users like
+# logcheck, etc.
+docker_mig_uid: 1000
+docker_mig_gid: 1000
+
+# The environment definition for the docker-migrid container
+docker_migrid:
+  # IMPORTANT: this is a sample env file with the setup used for the default simple
+  #            docker build. To adjust the build settings you can copy it to ./.env and
+  #            make your desired changes before running
+  #            make init && make build
+
+  # Optionally use DOCKER_MIGRID_ROOT to point to another root location than PWD,
+  # which might be useful e.g. when automating deployment with ansible.
+  # IMPORTANT: with docker on centos7 RO-mounts may fail unless we use an abs path
+  docker_migrid_root: "{{ docker_migrid_install_base }}"
+
+  log_root: "${DOCKER_MIGRID_ROOT}/sitelogs"
+  persistent_root: "${DOCKER_MIGRID_ROOT}/sitedata"
+  volatile_root: "${DOCKER_MIGRID_ROOT}/sitetmp"
+
+  # set to override container user and group ids
+  uid: "{{ docker_mig_uid }}"
+  gid: "{{ docker_mig_gid }}"
+  #user: mig
+
+  # the domain in which the instance should be accessible
+  domain: migrid.test
+  wildcard_domain: "*.migrid.test"
+  public_domain: www.migrid.test
+  migcert_domain: 
+  extcert_domain: 
+  migoid_domain: ext.migrid.test
+  extoid_domain: 
+  # note: uncoment next domain for testing external openid connect provider
+  #extoidc_domain: oidc.migrid.test
+  extoidc_domain: 
+  sid_domain: sid.migrid.test
+  io_domain: io.migrid.test
+  openid_domain: openid.migrid.test
+  ftps_domain: ftps.migrid.test
+  sftp_domain: sftp.migrid.test
+  webdavs_domain: webdavs.migrid.test
+  mig_oid_provider: https://ext.migrid.test/openid/
+  ext_oid_provider: https://openid.example.com/
+  ext_oidc_provider_meta_url: unset
+  ext_oidc_client_name: unset
+  ext_oidc_client_id: unset
+  ext_oidc_scope: "profile email"
+  ext_oidc_remote_user_claim: sub
+  # uncomment to enable workaround for openid connect sign up with accented chars
+  #ext_oidc_pass_claim_as: "both latin1"
+  ext_oidc_pass_claim_as: "both"
+  public_http_port: 80
+  public_https_port: 443
+  migcert_https_port: 443
+  extcert_https_port: 443
+  migoid_https_port: 443
+  extoid_https_port: 443
+  extoidc_https_port: 443
+  sid_https_port: 443
+  sftp_port: 22222
+  sftp_subsys_port: 2222
+  sftp_show_port: 22
+  davs_port: 4443
+  davs_show_port: 443
+  openid_port: 8443
+  openid_show_port: 443
+  ftps_ctrl_port: 8021
+  ftps_ctrl_show_port: 21
+  ftps_passive_ports: 8100-8399
+
+  # various helpers
+  admin_email: "MiG Info <mig@migrid.test>"
+  admin_list: "/C=DK/ST=NA/L=NA/O=EX/OU=NA/CN=John Doe/emailAddress=admin@migrid.test"
+  smtp_sender: "Do Not Reply <no-reply@migrid.test>"
+  log_level: info
+  title: "Minimum intrusion Grid"
+  short_title: MiG
+  mig_oid_title: "MiG"
+  ext_oid_title: "External"
+  ext_oidc_title: "External"
+  peers_permit: "distinguished_name:.*"
+  vgrid_creators: "distinguished_name:.*"
+  vgrid_managers: "distinguished_name:.*"
+
+  # which site setup flavor to emulate regarding skin, etc.
+  # {migrid, idmc, erda, sif}
+  emulate_flavor: migrid
+  # and the corresponding fqdn used e.g. in that flavor index-fqdn.html
+  emulate_fqdn: migrid.org
+  skin_suffix: basic
+
+  # site settings
+  enable_openid: true
+  enable_sftp: false
+  enable_sftp_subsys: true
+  enable_davs: true
+  enable_ftps: true
+  enable_sharelinks: true
+  enable_transfers: true
+  enable_duplicati: true
+  enable_seafile: false
+  seafile_fqdn: 
+  seafile_ro_access: false
+  enable_sandboxes: false
+  enable_vmachines: false
+  enable_crontab: true
+  enable_jobs: true
+  enable_resources: true
+  enable_events: true
+  enable_gravatars: true
+  enable_sitestatus: true
+  status_system_match: ANY
+  enable_freeze: true
+  enable_cracklib: true
+  enable_imnotify: false
+  enable_notify: true
+  enable_preview: false
+  enable_workflows: false
+  enable_verify_certs: true
+  enable_jupyter: false
+  enable_cloud: false
+  enable_twofactor: true
+  enable_twofactor_strict_address: false
+  # mfa apps to link to on 2-factor auth setup page - empty for all
+  twofactor_auth_apps: "google freeotp yubico bitwarden microfocus"
+  enable_peers: true
+  mig_password_policy: "MODERN:10"
+  enable_logrotate: false
+  logrotate_migrid: false
+  peers_mandatory: true
+  peers_explicit_fields: "full_name email"
+  peers_contact_hint: "authorized to invite you as peer"
+  enable_migadmin: true
+  enable_gdp: false
+  gdp_email_notify: false
+  enable_self_signed_certs: false
+  build_mod_auth_openid: true
+  upgrade_mod_auth_openidc: true
+  # rocky9 paramiko is already recent
+  upgrade_paramiko: false
+  pubkey_from_dns: false
+  # note: stay with wsgidav-1.3 for python2 to avoid cve-2022-41905, we already get 4.3+ for python3
+  modern_wsgidav: false
+  # note: whether to use python3 as default - requires with_py3 to be enabled
+  # important: currently requires the git 'experimental' branch to work
+  # note: leave the choice of default python to the dockerfile default here
+  #prefer_python3: false
+
+  signup_methods: "migoid"
+  login_methods: "migoid"
+  user_interfaces: v3
+  auto_add_cert_user: false
+  auto_add_oid_user: true
+  auto_add_oidc_user: true
+  auto_add_filter_fields: full_name
+  auto_add_filter_method: skip
+  # IMPORTANT: always restrict next to own local users if using e.g. WAYF
+  #            or similar (inter)national ID providers.
+  #auto_add_user_permit: 'email:.+@your.org$'
+  auto_add_user_permit: "distinguished_name:.*"
+  cert_valid_days: 365
+  oid_valid_days: 365
+  generic_valid_days: 365
+  openssh_version: 7.4
+  vgrid_label: Workgroup
+  # menu options override default and available extra apps on personal home page
+  default_menu: "home files vgrids archives settings setup logout"
+  user_menu: "sharelinks crontab transfers people downloads peers docs migadmin"
+  # use persistent salt for storing various sensitive data
+  # note: the two files should be manually created in ./state/secrets/ using initial
+  #       corresponding generated x_salt values from mig/server/migserver.conf
+  #digest_salt: "FILE::/home/mig/state/secrets/digest-salt.hex"
+  #crypto_salt: "FILE::/home/mig/state/secrets/crypto-salt.hex"
+  # site-specific javascript and stylesheets to inject on user pages
+  extra_userpage_scripts: ""
+  extra_userpage_styles: ""
+
+  # the containers can take advantage of a fast shared scratch space e.g. in
+  # memory for caching various internal state helpers. if not set local disk will
+  # be used by default.
+  # note: a shared mig_system_run scratch space on tmpfs can be made with
+  #       something like:
+  # tmpfs   /storage/tmpfs/mig_system_run  tmpfs   nosuid,nodev,noatime,noexec,uid=1000,gid=1000,mode=0770,size=128m   0 0
+  # in /etc/fstab. manual mount can be done with:
+  # sudo mount /storage/tmpfs/mig_system_run
+  # note: toggle commenting on  next two lines if you have such a tmpfs set up in the given path
+  #mig_system_run: "/storage/tmpfs/mig_system_run"
+  mig_system_run: "${DOCKER_MIGRID_ROOT}/state/mig_system_run"
+  # the apache auth openid module performs and scales better if the associated
+  # internal openid store directory runs from fast storage. it's a volatile data
+  # store, which allows more concurrent openid 2.0 clients if it e.g. uses tmpfs.
+  # if you have migoid or extoid in login_methods you likely want to look into
+  # that. the instructions for mig_system_run can be mostly reused in that case.
+  # otherwise you can safely ignore the openid_store setting.
+  # note: toggle commenting on next two lines if you have such a tmpfs set up in the given path
+  #openid_store: "/storage/tmpfs/openid_store"
+  openid_store: "${DOCKER_MIGRID_ROOT}/state/openid_store"
+  # we need a read-only bind mounted version of the vgrid_files_writable
+  # directory and the underlying location can be configured here.
+  #vgrid_files_writable: "/storage/migrid.test/sitedata/vgrid_files_writable"
+  vgrid_files_writable: "${DOCKER_MIGRID_ROOT}/state/vgrid_files_writable"
+
+  # which svn repo and version of migrid should be used
+  #mig_svn_repo: https://svn.code.sf.net/p/migrid/code/trunk
+  #mig_svn_rev: head
+
+  # which git repo and version of migrid should be used
+  mig_git_repo: https://github.com/ucphhpc/migrid-sync.git
+  # note: use 'git edge' here for tried and tested python2 version
+  # note: use 'git experimental' here for future python3 version
+  # note: leave the branch decision to the dockerfile default here
+  #mig_git_branch: edge
+  #mig_git_rev: 97626ff1d7bbf37c96ee67c53b60bc1520cb7915
+  mig_git_branch: experimental
+  #mig_git_rev: 60237fa3e1c2fb2930d86d8d459dc070d311a796
+  #mig_git_rev: head
+  mig_git_rev: v1.14.4+experimental
+  # note: when leaving the branch commented above we need to do the same here
+  container_tag:
+  #container_tag: 
+
+  # toggle python3 support in the containers.
+  # note: on platforms where python2 is the default python this option in itself
+  #       will not switch it on. use prefer_python3 as well to do that.
+  # note: leave the python3 inclusion to the dockerfile default here
+  #with_py3: true
+
+  # toggle git support - effectively switches from svn to git options above
+  with_git: true
+
+  # which timezone should the service use
+  tz: Europe/Copenhagen
+
+  # uncomment if you already run an smtp server on the host
+  #smtp_server: localhost
+
+  # lustre quota settings
+  # note: lustre >: 2.15.4 is required for quota support
+  # supported backends: 'lustre' and 'lustre-gocryptfs'
+  quota_backend: ""
+  quota_user_limit: 1099511627776
+  quota_vgrid_limit: 1099511627776
+  quota_lustre_version: 2.15.4
+  quota_lustre_base: "/dev/null"
+  quota_gocryptfs_xray: "/dev/null"
+  quota_gocryptfs_sock: "/dev/null"
+
+# Where to store the docker-migrid clone
+migrid_ucph_sites_install_base: "/opt/migrid-ucph-sites"
+
+migrid_ucph_sites_repo:
+  name: migrid-ucph-sites
+  url: https://github.com/ucphhpc/migrid-ucph-sites
+  version: "{{ migrid_ucph_sites_version | default('HEAD') }}"

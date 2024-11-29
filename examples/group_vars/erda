@@ -1,7 +1,7 @@
 ---
 
 #This sets the container type running migrid
-migrid_container_type: rocky8
+migrid_container_type: rocky9
 
 #This is used to execute for this type
 migrid_base_type: erda

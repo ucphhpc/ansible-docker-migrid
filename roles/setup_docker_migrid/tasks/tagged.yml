@@ -1,0 +1,297 @@
+---
+
+- name: check existing docker_migrid installation .env integrity
+  stat:
+    path: "{{ docker_migrid_install_base }}/.env"
+  register: docker_migrid_env_file
+
+- name: check existing docker_migrid installation docker-compose.yml integrity
+  stat:
+    path: "{{ docker_migrid_install_base }}/docker-compose.yml"
+  register: docker_migrid_compose_file
+
+- name: check existing docker_migrid installation directory integrity
+  stat:
+    path: "{{ docker_migrid_install_base }}"
+  register: docker_migrid_clone_dir
+
+- name: check existing docker_migrid installation version
+  stat:
+    path: "{{ docker_migrid_install_base }}/docker-migrid_{{ docker_migrid_repo.version }}"
+  register: docker_migrid_clone_version
+
+- name: install docker_migrid dependencies
+  package:
+    name:
+      - git
+      - make
+    state: present
+  become: yes
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+# NOTE: keep and only checkout requested version to avoid endless reinstall
+- name: "ensure that {{ docker_migrid_repo.name }} clone dir exists"
+  file:
+    path: "{{ install_staging_root }}/{{ docker_migrid_repo.name }}"
+    state: directory
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+# NOTE: we sometimes end up with a broken detached state where next task errs like:
+#       "cmd": "/usr/bin/git reset --hard HEAD", "msg": "error: unable to read
+#               sha1 file of Makefile (0110b909d3c1ce6f97b35752015dcb64e4ed4371)
+#       or similar. In that case one can either delete the clone in {{ install_staging_root }}/BLA on
+#       the target or try to repair what git fsck reports corrupted before retry.
+- name: "clone the {{ docker_migrid_repo.name }} repo, checking out version {{ docker_migrid_repo.version }}"
+  git:
+    repo: "{{ docker_migrid_repo.url }}"
+    dest: "{{ install_staging_root }}/{{ docker_migrid_repo.name }}"
+    clone: yes
+    update: yes
+    force: yes
+    version: "{{ docker_migrid_repo.version }}"
+  register: docker_migrid_cloned
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: "make sure the target directory path {{ docker_migrid_install_base }} exists"
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ user | default('root') }}"
+    group: "{{ user | default('root') }}"
+    mode: 0755
+  with_items:
+    - "{{ docker_migrid_install_base }}"
+  become: yes
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: "synchronize the cloned {{ docker_migrid_repo.name }} to {{ docker_migrid_install_base }}/"
+  synchronize:
+    src: "{{ install_staging_root }}/{{ docker_migrid_repo.name }}/"
+    dest: "{{ docker_migrid_install_base }}"
+    # Remove files in the dest that are not in the src
+    # after the transfer
+    delete: yes
+    recursive: yes
+    rsync_opts:
+      - "--exclude=.git --exclude=certs"
+  delegate_to: "{{ inventory_hostname }}"
+  when: "docker_migrid_cloned.changed == true or docker_migrid_env_file.stat.exists == false or docker_migrid_compose_file.stat.exists == false or docker_migrid_clone_version.stat.exists == false"
+  register: docker_migrid_synced
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: "mark installed docker-migrid with git version"
+  file:
+    state: touch
+    path: "{{ docker_migrid_install_base }}/docker-migrid_{{ docker_migrid_repo.version }}"
+    owner: "{{ user | default('root') }}"
+    group: "{{ user | default('root') }}"
+    mode: 0644
+  become: yes
+  when: "docker_migrid_synced.changed or not docker_migrid_clone_version.stat.exists"
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: Generate the environment file from template and vars
+  template:
+    src: "docker-migrid/env.j2"
+    dest: "{{ docker_migrid_install_base }}/ansible_generated.env"
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: symlink the environment file into default search path
+  file:
+    src: "{{ docker_migrid_install_base }}/ansible_generated.env"
+    dest: "{{ docker_migrid_install_base }}/.env"
+    state: link
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: Generate the docker-compose file from template and vars
+  template:
+    src: "docker-migrid/docker-compose.yml.j2"
+    dest: "{{ docker_migrid_install_base }}/ansible_generated.docker-compose.yml"
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: symlink the docker-compose file into place
+  file:
+    src: "{{ docker_migrid_install_base }}/ansible_generated.docker-compose.yml"
+    dest: "{{ docker_migrid_install_base }}/docker-compose.yml"
+    state: link
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: "check whether the specified Dockerfile {{ docker_migrid_dockerfile }} exists"
+  stat:
+    path: "{{ docker_migrid_install_base }}/{{ docker_migrid_dockerfile }}"
+  register: selected_dockerfile
+  when: docker_migrid_dockerfile is defined
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: symlink the selected Dockerfile
+  file:
+    src: "{{ docker_migrid_install_base }}/{{ docker_migrid_dockerfile }}"
+    dest: "{{ docker_migrid_install_base }}/Dockerfile"
+    state: link
+  when: selected_dockerfile.stat.exists
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: check existing docker_migrid installation state/wwpublic directory integrity
+  stat:
+    path: "{{ docker_migrid_install_base }}/state/wwwpublic"
+  register: docker_migrid_state_wwwpublic_dir
+
+- name: check existing migrid-ucph-sites installation version
+  stat:
+    path: "{{ migrid_ucph_sites_install_base }}/migrid-ucph-sites_{{ migrid_ucph_sites_repo.version }}"
+  register: migrid_ucph_sites_clone_version
+
+# NOTE: keep and only checkout requested version to avoid endless reinstall
+- name: "ensure that {{ migrid_ucph_sites_repo.name }} clone dir exists"
+  file:
+    path: "{{ install_staging_root }}/{{ migrid_ucph_sites_repo.name }}"
+    state: directory
+  tags:
+    - "{{ migrid_ucph_sites_repo.name }}"
+
+- name: "clone the {{ migrid_ucph_sites_repo.name }} repo, checking out version {{ migrid_ucph_sites_repo.version }}"
+  git:
+    repo: "{{ migrid_ucph_sites_repo.url }}"
+    dest: "{{ install_staging_root }}/{{ migrid_ucph_sites_repo.name }}"
+    clone: yes
+    update: yes
+    force: yes
+    version: "{{ migrid_ucph_sites_repo.version }}"
+  register: migrid_ucph_sites_cloned
+  tags:
+    - "{{ migrid_ucph_sites_repo.name }}"
+
+- name: "make sure the target directory path {{ migrid_ucph_sites_install_base }} exists"
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ user | default('root') }}"
+    group: "{{ user | default('root') }}"
+    mode: 0755
+  with_items:
+    - "{{ migrid_ucph_sites_install_base }}"
+  become: yes
+  tags:
+    - "{{ migrid_ucph_sites_repo.name }}"
+
+- name: "synchronize the cloned {{ migrid_ucph_sites_repo.name }} to {{ migrid_ucph_sites_install_base }}/"
+  synchronize:
+    src: "{{ install_staging_root }}/{{ migrid_ucph_sites_repo.name }}/"
+    dest: "{{ migrid_ucph_sites_install_base }}"
+    # Remove files in the dest that are not in the src
+    # after the transfer
+    delete: yes
+    recursive: yes
+    rsync_opts:
+      - "--exclude=.git"
+  delegate_to: "{{ inventory_hostname }}"
+  when: "migrid_ucph_sites_cloned.changed == true or migrid_ucph_sites_clone_version.stat.exists == false"
+  register: migrid_ucph_sites_synced
+  tags:
+    - "{{ migrid_ucph_sites_repo.name }}"
+
+- name: "mark installed migrid-ucph-sites with git version"
+  file:
+    state: touch
+    path: "{{ migrid_ucph_sites_install_base }}/migrid-ucph-sites_{{ migrid_ucph_sites_repo.version }}"
+    owner: "{{ user | default('root') }}"
+    group: "{{ user | default('root') }}"
+    mode: 0644
+  become: yes
+  when: "migrid_ucph_sites_synced.changed or not migrid_ucph_sites_clone_version.stat.exists"
+  tags:
+    - "{{ migrid_ucph_sites_repo.name }}"
+
+- name: "synchronize the wwwpublic additions into place in docker-migrid"
+  synchronize:
+    src: "{{ migrid_ucph_sites_install_base }}/state/wwwpublic/"
+    dest: "{{ docker_migrid_install_base }}/state/wwwpublic/"
+  delegate_to: "{{ inventory_hostname }}"
+  when: "docker_migrid_state_wwwpublic_dir.stat.exists"
+  tags:
+    - "{{ migrid_ucph_sites_repo.name }}"
+
+- name: "setup the {{ docker_migrid_repo.name }} services"
+  template:
+    src: "systemd/{{ item.name }}.service.j2"
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+  vars:
+    name: "{{ item.name }}"
+    group: "{{ user }}"
+    working_dir: "{{ item.working_dir }}"
+    pre_start_command: "{{ item.pre_start_command }}"
+    start_command: "{{ item.start_command }}"
+    stop_command: "{{ item.stop_command }}"
+  with_items:
+    - { container_manager: "{{ docker_migrid_repo.container_manager | default('docker') }}",
+        name: "{{ docker_migrid_repo.name }}",
+        working_dir: "{{ docker_migrid_install_base }}",
+        pre_start_command: "{{ docker_migrid_repo.pre_start_command | default('make init') }}",
+        start_command: "{{ docker_migrid_repo.start_command | default('make daemon') }}",
+        stop_command: "{{ docker_migrid_repo.stop_command | default('make down') }}" }
+  become: yes
+  register: docker_migrid_services_configured
+  when: "docker_migrid_cloned.changed == true or docker_migrid_env_file.stat.exists == false or docker_migrid_clone_dir.stat.exists == false"
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: "enable the {{ docker_migrid_repo.name }} service"
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    daemon_reload: yes
+  with_items:
+    - "{{ docker_migrid_repo.name }}"
+  become: yes
+  when: "docker_migrid_services_configured.changed"
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: Generate the letsencrypt management cronjob from template and vars
+  template:
+    src: "cron/migcheckssl.cron"
+    dest: "/etc/cron.daily/migcheckssl"
+    mode: 0700
+  #when: migrid_deployed
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: check existing storage sitecerts directory integrity
+  stat:
+    path: "/storage/{{ fqdn }}/sitecerts"
+  register: docker_migrid_sitecerts_dir
+
+- name: "synchronize any site keys+certificates into place in docker-migrid"
+  synchronize:
+    src: "/storage/{{ fqdn }}/sitecerts/"
+    dest: "{{ docker_migrid_install_base }}/certs/"
+  delegate_to: "{{ inventory_hostname }}"
+  when: "docker_migrid_sitecerts_dir.stat.exists"
+  tags:
+    - "{{ docker_migrid_repo.name }}"
+
+- name: check existing storage siteextcerts directory integrity
+  stat:
+    path: "/storage/{{ fqdn }}/siteextcerts"
+  register: docker_migrid_siteextcerts_dir
+
+- name: "synchronize any external CA certificates into place in docker-migrid"
+  synchronize:
+    src: "/storage/{{ fqdn }}/siteextcerts/"
+    dest: "{{ docker_migrid_install_base }}/external-certificates/"
+  delegate_to: "{{ inventory_hostname }}"
+  when: "docker_migrid_siteextcerts_dir.stat.exists"
+  tags:
+    - "{{ docker_migrid_repo.name }}"

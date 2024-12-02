@@ -11,9 +11,11 @@
   become: true
   roles:
     - setup_vars
-    - startup_encrypt_state
+    - migrid_pre_check
     - role: start_promtail
       when: enable_promtail is defined and enable_promtail == true
     - role: start_logstash
       when: enable_logstash is defined and enable_logstash == true
+    - connect_lustre
+    - startup_encrypt_state
     - start_containers

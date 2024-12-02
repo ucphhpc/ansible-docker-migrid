@@ -1,4 +1,0 @@
----
-migrid_redhat_prerequisites:
-  - git
-  - rsync

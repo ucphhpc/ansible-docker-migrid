@@ -12,5 +12,8 @@
   roles:
     - setup_vars
     - startup_encrypt_state
-    - start_logging
+    - role: start_promtail
+      when: enable_promtail is defined and enable_promtail == true
+    - role: start_logstash
+      when: enable_logstash is defined and enable_logstash == true
     - start_containers

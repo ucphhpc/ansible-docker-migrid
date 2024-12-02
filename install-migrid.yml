@@ -9,7 +9,10 @@
   roles:
     - setup_vars
     - migrid_pre_check
-    - stop_logging
+    - role: stop_promtail
+      when: enable_promtail is defined and enable_promtail == true
+    - role: stop_logstash
+      when: enable_logstash is defined and enable_logstash == true
     - umount_encrypt_state
     - migrid_logrotate
     - migrid_clean
@@ -30,5 +33,7 @@
     - copy_static_files
     - migrid_email_notifications
     - update_status_html
-    - promtail_migrid
-    - migrid_logstash_gdp
+    - role: promtail_migrid
+      when: enable_promtail is defined and enable_promtail == true
+    - role: migrid_logstash_gdp
+      when: enable_logstash is defined and enable_logstash == true

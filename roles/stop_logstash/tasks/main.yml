@@ -1,9 +1,4 @@
 ---
-- name: stop promtail
-  systemd:
-    name: promtail
-    state: stopped
-
 - name: stop logstash
   systemd:
     name: logstash

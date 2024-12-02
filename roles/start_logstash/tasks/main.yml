@@ -1,9 +1,4 @@
 ---
-- name: start promtail
-  systemd:
-    name: promtail
-    state: started
-
 - name: start logstash
   systemd:
     name: logstash

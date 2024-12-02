@@ -24,6 +24,11 @@ migrid_docker_compose_preset: docker-compose_production.yml # link docker-compos
 migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
 #migrid_docker_repository_version:...      # use this to set the migrid-docker version, if not set it will get head.
 
+# The default user/group IDs used inside the container
+# to run the migrid service.
+migrid_deploy_uid: 10000
+migrid_deploy_gid: 10000
+
 #to use upsate_status_html
 migrid_update_status_deploy_version: true   # if defined will update version
 migrid_update_status_subversion: true       # if defined will update subversion number

@@ -40,7 +40,7 @@
 
 - name: register docker-migrid repository version
   set_fact:
-    ansible_docker_migrid_repository_version: "{{ { 'ansible_docker_migrid_repository_version' : migrid_docker_repository_version | default('master') } }}"
+    ansible_docker_migrid_repository_version: "{{ { 'ansible_docker_migrid_repository_version' : docker_migrid_version | default('master') } }}"
 
 #-------------------------------
 #do container check and start

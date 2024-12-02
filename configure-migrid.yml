@@ -7,3 +7,4 @@
     - setup_vars
     - configure_lustre
     - setup_encrypt_state
+    - create_static_users

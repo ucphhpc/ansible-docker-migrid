@@ -18,8 +18,8 @@
     - migrid_clean
     - migrid_users
     - role: setup_docker_migrid
-      docker_mig_uid: "{{ migrid_deploy_uid }}"
-      docker_mig_gid: "{{ migrid_deploy_gid }}"
+      docker_mig_uid: "{{ migrid_user_uid }}"
+      docker_mig_gid: "{{ migrid_user_gid }}"
       user: "{{ migrid_adm }}"
       tags: setup_docker_migrid
     - copy_overlay_files

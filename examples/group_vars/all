@@ -16,18 +16,15 @@ migrid_certs: "{{ migrid_root }}/certs"     # directory where all certificates r
 migrid_adm: migadm                          # default user for migrid administrator. Only used on linux file system, not while running migrid
 migrid_adm_gid: 1010                        # gid of migrid_adm user
 migrid_adm_uid: 1010                        # uid of migrid_adm user
-migrid_docker_repository: https://github.com/ucphhpc/docker-migrid.git     # the github repository where docker-migrid recides
 migrid_user: mig                            # this is the use on the sever with unique uid/gid
+migrid_user_uid: 10000                      # uid of the migrid_user
+migrid_user_gid: 10000                      # gid of the migrid user
+migrid_docker_repository: https://github.com/ucphhpc/docker-migrid.git     # the github repository where docker-migrid recides
 migrid_encrypt_state: false                 # this is used to set our base expectation for state directory on lustre. That it is only encrypted if specified.
 migrid_decrypt_dir: decrypt_state           # this is the state directory name when encryption is set
 migrid_docker_compose_preset: docker-compose_production.yml # link docker-compose to existing compose file if defined. Otherwise you will have to set migrid_docker_compose_custom to what you want to use.
 migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
 #migrid_docker_repository_version:...      # use this to set the migrid-docker version, if not set it will get head.
-
-# The default user/group IDs used inside the container
-# to run the migrid service.
-migrid_deploy_uid: 10000
-migrid_deploy_gid: 10000
 
 #to use upsate_status_html
 migrid_update_status_deploy_version: true   # if defined will update version
@@ -60,8 +57,10 @@ migrid_lustre_mount:
     - { src: "ip-site-a@tcp1:ip-site-a@tcp1:/sif-site-a", dest: "sif-site-a" }
     - { src: "ip-site-b@tcp2:ip-site-b@tcp2:/sif-site-b", dest: "sif-site-b" }
 
+
 #logstash settings
 enable_logstash: false
+
 
 #loki server
 #    __       _    _ 

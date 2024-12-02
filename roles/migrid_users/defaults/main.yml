@@ -1,0 +1,11 @@
+# The default user/group IDs used inside the container
+# to run the migrid service.
+migrid_user: mig
+migrid_user_uid: 10000
+migrid_user_gid: 10000
+
+# The default user/group IDs used by the hostside migrid administration user.
+# This user is not mapped into the container, but is used to manage the migrid
+migrid_adm: migadm
+migrid_adm_uid: 10010
+migrid_adm_gid: 10010

@@ -23,7 +23,6 @@
       user: "{{ migrid_adm }}"
       tags: setup_docker_migrid
     - copy_overlay_files
-    - migrid_baseline
     - copy_cert_files
     - configure_lustre
     - connect_lustre

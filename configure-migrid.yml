@@ -1,0 +1,9 @@
+---
+- name: configure docker-migrid
+  hosts:
+    - all
+  gather_facts: true
+  roles:
+    - setup_vars
+    - configure_lustre
+    - setup_encrypt_state

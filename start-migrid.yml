@@ -4,7 +4,7 @@
 # ansible-playbook --ask-vault-pass -i inventory.yml -l host -u ansib start-migrid.yml
 # using a server without encrypted drive:
 # ansible-playbook -i inventory.yml -l host -u ansib start-migrid.yml
-- name: Start migrid
+- name: Start docker-migrid
   hosts:
     - all
   gather_facts: true
@@ -13,9 +13,9 @@
     - setup_vars
     - migrid_pre_check
     - role: start_promtail
-      when: enable_promtail is defined and enable_promtail == true
+      when: promtail_enable is defined and promtail_enable == true
     - role: start_logstash
-      when: enable_logstash is defined and enable_logstash == true
+      when: logstash_enable is defined and logstash_enable == true
     - connect_lustre
     - startup_encrypt_state
     - start_containers

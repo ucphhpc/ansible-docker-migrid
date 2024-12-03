@@ -5,6 +5,11 @@
   gather_facts: true
   roles:
     - setup_vars
+    - copy_overlay_files
+    - copy_cert_files
+    - copy_static_files
     - configure_lustre
     - setup_encrypt_state
     - create_static_users
+    - migrid_email_notifications
+    - update_status_html

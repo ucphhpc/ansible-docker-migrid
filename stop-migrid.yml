@@ -4,7 +4,7 @@
 # ansible-playbook -i inventory.yml -l host -u ansib stop-migrid.yml
 #
 # you can always verify if a mountpoint is unmounted with: mountpoint decrypt_state/
-- name: Stop migrid
+- name: Stop docker-migrid
   hosts:
     - all
   gather_facts: true
@@ -13,7 +13,7 @@
     - setup_vars
     - stop_containers
     - role: stop_promtail
-      when: enable_promtail is defined and enable_promtail == true
+      when: promtail_enable is defined and promtail_enable == true
     - role: stop_logstash
-      when: enable_logstash is defined and enable_logstash == true
+      when: logstash_enable is defined and logstash_enable == true
     - umount_encrypt_state

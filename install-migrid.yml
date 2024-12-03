@@ -1,7 +1,7 @@
 #this will prepare MiGrid for being able to run on this server. Setting up environment and fetching stuff, and linking stuff.
 #ansible-playbook --ask-vault-pass -i inventory.yml -l host -u ansib install-migrid.yml
 ---
-- name: install docker migrid
+- name: install docker-migrid
   hosts:
     - all
   gather_facts: true
@@ -9,20 +9,13 @@
   roles:
     - setup_vars
     - migrid_logrotate
-    - migrid_clean
+    - when: logrotate_enable is defined and logrotate_enable == true
     - migrid_users
     - role: setup_docker_migrid
       docker_mig_uid: "{{ migrid_user_uid }}"
       docker_mig_gid: "{{ migrid_user_gid }}"
       user: "{{ migrid_adm }}"
-      tags: setup_docker_migrid
-    - copy_overlay_files
-    - copy_cert_files
-      # here is last stop before make will run in next role
-    - copy_static_files
-    - migrid_email_notifications
-    - update_status_html
     - role: promtail_migrid
-      when: enable_promtail is defined and enable_promtail == true
+      when: promtail_enable is defined and promtail_enable == true
     - role: migrid_logstash_gdp
-      when: enable_logstash is defined and enable_logstash == true
+      when: logstash_enable is defined and logstash_enable == true

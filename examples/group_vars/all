@@ -57,8 +57,11 @@ migrid_lustre_mount:
     - { src: "ip-site-b@tcp2:ip-site-b@tcp2:/sif-site-b", dest: "sif-site-b" }
 
 
+#logrotate settings
+logrotate_enable: false
+
 #logstash settings
-enable_logstash: false
+logstash_enable: false
 
 
 #loki server
@@ -68,7 +71,7 @@ enable_logstash: false
 # / /__| (_) |   <| |
 # \____/\___/|_|\_\_|
 
-enable_promtail: false
+promtail_enable: false
 #promtail_loki_server: 
 promtail_loki_server: ip-loki-server
 # this sets the network card on vm servers where the above ip-net-site-a net is 

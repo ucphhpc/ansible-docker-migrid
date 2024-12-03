@@ -156,7 +156,7 @@ docker_migrid:
   twofactor_auth_apps: "google freeotp yubico bitwarden microfocus"
   enable_peers: true
   mig_password_policy: "MODERN:10"
-  enable_logrotate: false
+  logrotate_enable: false
   logrotate_migrid: false
   peers_mandatory: true
   peers_explicit_fields: "full_name email"

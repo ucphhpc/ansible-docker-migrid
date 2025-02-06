@@ -70,6 +70,14 @@
     state: touch
     mode: 0666
 
+- name: Ensure that /var/lib/logstash has correct user
+  file:
+    path: /var/lib/logstash
+    owner: "{{logstash_user}}"
+    group: "{{logstash_user}}"
+    state: directory
+    mode: 0755
+
 - name: Copy logstash.yml configuration file
   template:
     src: logstash.yml.j2

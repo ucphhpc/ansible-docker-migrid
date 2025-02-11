@@ -10,6 +10,9 @@ migrid_copy_cert_files:
 # Since migrid already uses cerificates we just reuse the pem for the server.
 migrid_selfsigned_cert_file: "{{migrid_copy_cert_files[0].src}}/server.ca.pem"
 
+# do not do anything in the cert directory
+migrid_cert_persistant: true
+
 migrid_cert_dir_links:
   - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}", dest: "{{ migrid_certs }}/anon.{{ migrid_copy_cert_files_domain }}" }
   - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}", dest: "{{ migrid_certs }}/cert.{{ migrid_copy_cert_files_domain }}" }

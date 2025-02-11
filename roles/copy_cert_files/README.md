@@ -31,3 +31,5 @@ Then it creates the MiGrid specific link structure in the directory, which looks
 where `migrid_copy_cert_files_domain="migrid.test"`
 
 The `migrid_certs` directory can then be mounted into the MiGrid containers.
+
+`migrid_cert_persistant` is default true, will ensure that migrid code will assume that everything in certs directory is handled by ansible.

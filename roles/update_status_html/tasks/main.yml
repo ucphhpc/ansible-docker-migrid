@@ -112,6 +112,7 @@
 - name: get MIG_GIT_BRANCH from env file
   shell:
     cmd: grep ^MIG_GIT_BRANCH {{ migrid_root }}/.env
+  ignore_errors: true
   register: result
   
 - name: register migrid git branch

@@ -64,14 +64,6 @@
   loop: "{{ migrid_static_html_links }}"
   when: migrid_static_html_links is defined
 
-- name: Copy dhparams.pem into certs/
-  copy:
-    src: "{{ migrid_root }}/httpd/MiG-certificates/dhparams.pem"
-    dest: "{{ migrid_certs }}"
-    owner: "{{ migrid_user }}"
-    group: "{{ migrid_user }}"
-    remote_src: true
-
 - name: Copy pdf files
   copy:
     src: "{{ migrid_copy_static_files_pdf_src }}"

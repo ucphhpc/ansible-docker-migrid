@@ -65,3 +65,22 @@
     group: "{{ migrid_user }}"
     mode: "0400"
   when: migrid_selfsigned_certificates==true
+
+# persistent file
+
+- name: Set .persistent file if defined
+  file:
+    path: "{{ migrid_root }}/certs/.persistent"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+    mode: 0644
+    state: touch
+  when: migrid_cert_persistant==true
+
+# using https://ssl-config.mozilla.org/ffdhe4096.txt as contents for dhparams.pem
+- name: Copy dhparams.pem into certs/
+  copy:
+    src: dhparams.pem
+    dest: "{{ migrid_certs }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"

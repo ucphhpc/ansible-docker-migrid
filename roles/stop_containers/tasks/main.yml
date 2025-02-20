@@ -8,7 +8,7 @@
   register: docker_compose
 
 - name: Running docker-compose down
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ migrid_root }}"
     state: absent
   when: docker_compose.stat.exists

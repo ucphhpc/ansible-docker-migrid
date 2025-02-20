@@ -14,37 +14,25 @@
 # ---------------------------------------------------------------
 
 
-# ---------------------------------------------------------------
-# This should be a seperate populate directories role
-# ---------------------------------------------------------------
-- name: Get infos on container
-  community.docker.docker_container_info:
-    name: migrid
-  register: migrid_container
+# find correct role to run docker
+# - name: Get version docker info
+#   community.docker.docker_host_info:
+#     register: result
 
-- name: Check if migrid container exists
-  fail:
-    msg: MiGrid container already exists, cannot continue!
-  when: migrid_container.exists
+# - name: Register docker version info
+#   set_fact:
+#     version: "{{result.host_info.ServerVersion.split('.')[0]}}"
 
-- name: Running docker-compose up
-  community.docker.docker_compose:
-    profiles: "{{ migrid_start_containers_profiles | default(omit) }}"
-    project_src: "{{ migrid_root }}"
-    build: false
-    recreate: always
+# you can only run old docker version if community.docker is version 3.13.0 in requirements.yml
+# - name: Run old docker version
+#   import_tasks:
+#     file: docker_old.yml
+#   when: version | int < 27
 
-- name: pause
-  pause:
-    seconds: 10
-
-- name: Stopping containers
-  community.docker.docker_compose:
-    project_src: "{{ migrid_root }}"
-    build: false
-    state: absent
-    stopped: true
-# ---------------------------------------------------------------
+- name: Run new docker version
+  import_tasks:
+    file: docker.yml
+#  when: version | int > 26
 
 - name: copy static html files for migrid
   copy:

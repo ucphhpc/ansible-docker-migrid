@@ -52,7 +52,7 @@
   register: migrid_container
 
 - name: Running docker-compose up if needed
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     profiles: "{{ migrid_start_containers_profiles | default(omit) }}"
     project_src: "{{ migrid_root }}"
     services:
@@ -71,7 +71,7 @@
 #stop container again
 #-------------------------------
 - name: Stopping containers if it was not already started before this role
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ migrid_root }}"
     services:
       - migrid

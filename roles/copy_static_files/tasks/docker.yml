@@ -1,0 +1,30 @@
+---
+
+- name: Get infos on container
+  community.docker.docker_container_info:
+    name: migrid
+  register: migrid_container
+
+- name: Check if migrid container exists
+  fail:
+    msg: MiGrid container already exists, cannot continue!
+  when: migrid_container.exists
+
+# is this idea of up/down deprecated?
+- name: Running docker-compose up
+  community.docker.docker_compose_v2:
+    profiles: "{{ migrid_start_containers_profiles | default(omit) }}"
+    project_src: "{{ migrid_root }}"
+    build: never
+    recreate: always
+    state: present
+
+- name: pause
+  pause:
+    seconds: 10
+
+- name: Stopping containers
+  community.docker.docker_compose_v2:
+    project_src: "{{ migrid_root }}"
+    build: never
+    state: absent

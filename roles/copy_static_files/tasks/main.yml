@@ -14,25 +14,16 @@
 # ---------------------------------------------------------------
 
 
-# find correct role to run docker
-# - name: Get version docker info
-#   community.docker.docker_host_info:
-#     register: result
-
-# - name: Register docker version info
-#   set_fact:
-#     version: "{{result.host_info.ServerVersion.split('.')[0]}}"
-
-# you can only run old docker version if community.docker is version 3.13.0 in requirements.yml
-# - name: Run old docker version
-#   import_tasks:
-#     file: docker_old.yml
-#   when: version | int < 27
-
 - name: Run new docker version
   import_tasks:
     file: docker.yml
-#  when: version | int > 26
+
+- name: Changer owner on all top level directories in migrid state directory
+  ansible.builtin.file:
+    path: "{{ migrid_state_directory }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+    #recurse: true
 
 - name: copy static html files for migrid
   copy:

@@ -57,7 +57,7 @@
     project_src: "{{ migrid_root }}"
     services:
       - migrid
-    build: false
+    build: never
     recreate: always
   when: not migrid_container.exists
 
@@ -75,9 +75,8 @@
     project_src: "{{ migrid_root }}"
     services:
       - migrid
-    build: false
+    build: never
     state: absent
-    stopped: true
   when: not migrid_container.exists
 
 - name: register openid version

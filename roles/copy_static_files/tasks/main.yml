@@ -25,6 +25,16 @@
     group: "{{ migrid_user }}"
     #recurse: true
 
+# This is to support that a server can have another server name than the DOMAIN in env file
+- name: find domain for migrid environment
+  shell:
+    cmd: "grep ^DOMAIN= /opt/migrid/docker-migrid/.env | awk -F'=' '{print $2}'"
+  register: results
+
+- name: Set domain
+  set_fact:
+    migrid_domain: "{{results.stdout}}"
+
 - name: copy static html files for migrid
   copy:
     src: "{{ migrid_copy_static_files_html_src }}"
@@ -36,7 +46,7 @@
 
 - name: Link static html files in wwwpublic
   file:
-    src: "{{ item.file }}-{{ inventory_hostname }}.html"
+    src: "{{ item.file }}-{{ migrid_domain }}.html"
     dest: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: link
     force: true

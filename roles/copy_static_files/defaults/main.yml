@@ -1,5 +1,10 @@
 ---
-migrid_copy_static_files_html_src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ inventory_hostname }}.html"
+migrid_copy_static_files_html_src: "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}-{{ migrid_domain }}.html"
+
+# this variable is not used
 migrid_copy_static_files_dat_src:  "manual/au-overlay/{{ ansible_hostname }}/files/data_categories.json"
+
 migrid_copy_static_files_pdf_src:  "manual/au-overlay/{{ ansible_hostname }}/files/{{ item.file }}"
+
+# this variable is not used
 migrid_copy_static_files_make_clean: true

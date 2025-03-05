@@ -1,5 +1,5 @@
 ---
-migrid_copy_cert_files_domain: "{{ inventory_hostname }}"
+migrid_copy_cert_files_domain: "{{ migrid_domain }}"
 migrid_copy_cert_files_remote_src: false
 migrid_copy_cert_files:
   - src: manual/certs/{{ ansible_hostname }}/
@@ -32,3 +32,6 @@ migrid_cert_file_links:
   - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}/server.ca.pem", dest: "{{ migrid_certs }}/server.ca.pem",  }
   - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}/server.crt",    dest: "{{ migrid_certs }}/server.crt",     }
   - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}/server.key",    dest: "{{ migrid_certs }}/server.key",     }
+  - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}/combined.pem.sha256",  dest: "{{ migrid_certs }}/combined.pem.sha256",   }
+  - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}/combined.pub.md5",  dest: "{{ migrid_certs }}/combined.pub.md5",   }
+  - { src: "MiG/*.{{ migrid_copy_cert_files_domain }}/combined.pub.sha256",  dest: "{{ migrid_certs }}/combined.pub.sha256",   }

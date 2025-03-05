@@ -2,8 +2,8 @@
 # this will start the containers in the docker-compose start fashion
 
 - name: Running docker-compose up
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{migrid_root}}"
-    build: false
+    build: never
     profiles: "{{ migrid_start_containers_profiles }}"
     recreate: "{{ migrid_start_containers_recreate }}"

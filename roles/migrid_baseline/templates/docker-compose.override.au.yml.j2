@@ -59,10 +59,3 @@ volumes:
       type: none
       device: {{migrid_state_directory}}/vgrid_files_writable
       o: "bind, ro"
-
-  mig_system_run:
-    driver: local
-    driver_opts:
-      type: none
-      device: {{migrid_state_directory}}/mig_system_run
-      o: bind  

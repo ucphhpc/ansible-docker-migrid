@@ -2,6 +2,16 @@
 # copy cert files into migrid_root directory
 # depends on migrid-baseline
 
+# This is to support that a server can have another server name than the DOMAIN in env file
+- name: find domain for migrid environment
+  shell:
+    cmd: "grep ^DOMAIN= /opt/migrid/docker-migrid/.env | awk -F'=' '{print $2}'"
+  register: results
+
+- name: Set domain
+  set_fact:
+    migrid_domain: "{{results.stdout}}"
+
 # If certs is set to external directory, link it into the docker-migrid directory
 - name: Link cert to external directory
 

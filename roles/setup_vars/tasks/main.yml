@@ -17,14 +17,3 @@
   set_fact:
     migrid_cipher_directory: /mnt/{{migrid_lustre_mount_point}}/{{ansible_hostname}}
   when: migrid_encrypt_state==true
-
-# This is to support that a server can have another server name than the DOMAIN in env file
-# this is used in copy_static_files and copy_cert_files
-- name: find domain for migrid environment
-  shell:
-    cmd: "grep ^DOMAIN= /opt/migrid/docker-migrid/.env | awk -F'=' '{print $2}'"
-  register: results
-
-- name: Set domain
-  set_fact:
-    migrid_domain: "{{results.stdout}}"

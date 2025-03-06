@@ -3,6 +3,17 @@
 #build containers, setup the rest for deployment
 # depends on migrid-baseline, startup-encrypt-state
 
+# This is to support that a server can have another server name than the DOMAIN in env file
+- name: find domain for migrid environment
+  shell:
+    cmd: "grep ^DOMAIN= /opt/migrid/docker-migrid/.env | awk -F'=' '{print $2}'"
+  register: results
+
+- name: Set domain
+  set_fact:
+    migrid_domain: "{{results.stdout}}"
+
+
 # ---------------------------------------------------------------
 # This should be a seperate build role
 # ---------------------------------------------------------------

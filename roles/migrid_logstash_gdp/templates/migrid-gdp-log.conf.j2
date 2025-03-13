@@ -1,8 +1,8 @@
 # mangaged by ansible
 input {
   file {
-    path => "{{migrid_state_directory}}/log/gdp.log"
-    sincedb_path => "{{migrid_state_directory}}/log/gdp.sincedb"
+    path => "{{migrid_log}}/gdp.log"
+    sincedb_path => "{{migrid_log}}/gdp.sincedb"
     start_position => "beginning"
   }
 }

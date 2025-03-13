@@ -36,14 +36,14 @@ scrape_configs:
     - labels:
         job: erdalogs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
         host: {{ansible_hostname}} # A `host` label will help identify logs from this machine vs others
-        __path__: {{migrid_state_directory}}/log/*.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
+        __path__: {{migrid_log}}/*.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
     pipeline_stages:
     - match:
         selector: '{job="erdalogs"}'
         stages:
           - regex:
               source: filename
-              expression: '{{migrid_state_directory}}/log/((gdp)|(?P<service>\S+?)).log'
+              expression: '{{migrid_log}}/((gdp)|(?P<service>\S+?)).log'
           - labels:
               service:
     - match:

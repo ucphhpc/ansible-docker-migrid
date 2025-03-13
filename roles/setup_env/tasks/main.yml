@@ -23,7 +23,7 @@
   lineinfile:
     path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
     regexp: "^LOG_ROOT"
-    line: "LOG_ROOT={{ migrid_root }}/log"
+    line: "LOG_ROOT={{ migrid_state_directory }}"
     insertafter: "^# Anchor for rendered variables"
 
 - name: set MIG_SYSTEM_RUN in env file

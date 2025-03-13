@@ -64,9 +64,9 @@
     recurse: true
 
 #when touching a file in lustre you cannot set the user or group.
-- name: touch {{migrid_state_directory}}/log/gdp.sincedb
+- name: touch {{migrid_log}}/gdp.sincedb
   file:
-    path: "{{migrid_state_directory}}/log/gdp.sincedb"
+    path: "{{migrid_log}}/gdp.sincedb"
     state: touch
     mode: 0666
 

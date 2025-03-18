@@ -14,11 +14,18 @@
     owner: "{{migrid_user}}"
     group: "{{migrid_user}}"
 
+# - name: Create cryptfs
+#   shell:
+#     cmd: su -c '/usr/bin/gocryptfs -passfile {{migrid_root}}/p__file -init {{migrid_cipher_directory}}' mig
+#   register: results
+#   ignore_errors: true
+
 - name: Create cryptfs
   shell:
-    cmd: su -c '/usr/bin/gocryptfs -passfile {{migrid_root}}/p__file -init {{migrid_cipher_directory}}' mig
+    cmd: "/usr/bin/gocryptfs -passfile {{migrid_root}}/p__file -init {{migrid_cipher_directory}}"
   register: results
   ignore_errors: true
+
 
 - name: Remove pfile
   file:

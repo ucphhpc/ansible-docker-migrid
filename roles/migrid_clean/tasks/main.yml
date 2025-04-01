@@ -1,10 +1,26 @@
 # clean up directories before doing anything is a good thing.. aah the fresh smell of clean :)
 ---
+
+# this will be use if you run from scratch
+- name: Create directory for MiGrid
+  ansible.builtin.file:
+    path: "{{ migrid_root }}"
+    owner: "{{ migrid_adm }}"
+    group: "{{ migrid_adm }}"
+    state: directory
+
+#check if Makefile exists, this will only be a problem when running from scratch
+- name: check if Makefile exists
+  ansible.builtin.stat:
+    path: "{{ migrid_root }}/Makefile"
+  register: dorunmake
+
 - name: Run make clean to remove anything already built
   shell:
     cmd: make clean > make-clean.log 2>&1
     chdir: "{{ migrid_root }}"
   when:
+    - dorunmake.stat.exists
     - migrid_clean_remove_app_root == false
     - migrid_make_clean == true
 
@@ -24,13 +40,17 @@
   shell:
     cmd: make dockerclean > clean.log 2>&1
     chdir: "{{ migrid_root }}"
-  when: migrid_clean_docker_prune_all == true
+  when:
+    - dorunmake.stat.exists 
+    - migrid_clean_docker_prune_all == true
 
 - name: Run make dockervolumeclean
   shell:
     cmd: make dockervolumeclean >> clean.log 2>&1
     chdir: "{{ migrid_root }}"
-  when: migrid_clean_docker_prune_all == true
+  when: 
+    - dorunmake.stat.exists
+    - migrid_clean_docker_prune_all == true
 
 - name: Remove {{ migrid_overlay }}
   file:

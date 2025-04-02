@@ -1,0 +1,49 @@
+---
+#this will install gocryptfs from github
+
+- name: Create temporary build directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: build
+  register: tempdir
+
+- name: Download gocryptfs binary to local folder
+  ansible.builtin.get_url:
+    url: "https://github.com/rfjakob/gocryptfs/releases/download/v{{gocryptfs_version}}/gocryptfs_v{{gocryptfs_version}}_linux-static_amd64.tar.gz"
+    dest: "{{tempdir.path}}"
+    mode: 0644
+
+- name: Unpack prometheus binaries
+  ansible.builtin.unarchive:
+    src: "{{tempdir.path}}/gocryptfs_v{{gocryptfs_version}}_linux-static_amd64.tar.gz"
+    dest: "{{tempdir.path}}"
+    remote_src: true
+
+- name: Copy gocryptfs files
+  copy:
+    src: "{{item}}"
+    dest: "/usr/bin"
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: true
+  loop:
+    - "{{tempdir.path}}/gocryptfs"
+    - "{{tempdir.path}}/gocryptfs-xray"
+
+# should be supported in redhat variants and ubuntu
+- name: Install man files
+  community.general.archive:
+    path: "{{tempdir.path}}/{{item}}"
+    dest: "/usr/share/man/man1/{{item}}.gz"
+    format: gz
+  loop:
+      - "gocryptfs.1"
+      - "gocryptfs-xray.1"
+
+- name: Remove temporary build directory
+  file:
+    path: "{{tempdir.path}}"
+    state: absent
+
+

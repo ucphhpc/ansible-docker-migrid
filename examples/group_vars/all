@@ -10,6 +10,7 @@
 #migrid settings
 migrid_root: /opt/migrid/docker-migrid      # root directory where all the migrid files recides on the server
 migrid_decrypted_directory: /opt/migrid     # The directory outside migrid_root where decrypted mountpoint is
+migrid_log: "{{ migrid_state_directory }}/miglog"   # the directory where migrid logs are put. Base part is defined in setup_env role
 ##migrid_auoverlay
 migrid_overlay: /opt/migrid/au-overlay   # the au overlay files that are placed ontop of files pulled from docker-migrid repository
 migrid_certs: "{{ migrid_root }}/certs"     # directory where all certificates recides
@@ -20,7 +21,7 @@ migrid_docker_repository: https://github.com/ucphhpc/docker-migrid.git     # the
 migrid_user: mig                            # this is the use on the sever with unique uid/gid
 migrid_encrypt_state: false                 # this is used to set our base expectation for state directory on lustre. That it is only encrypted if specified.
 migrid_decrypt_dir: decrypt_state           # this is the state directory name when encryption is set
-migrid_docker_compose_preset: docker-compose_production.yml # link docker-compose to existing compose file if defined. Otherwise you will have to set migrid_docker_compose_custom to what you want to use.
+migrid_docker_compose_preset: docker-compose_production_bind.yml # link docker-compose to existing compose file if defined.
 migrid_docker_compose_override: true        # to enable that the docker-compose file will be rendered from template in migrid_baseline role
 #migrid_docker_repository_version:...      # use this to set the migrid-docker version, if not set it will get head.
 
@@ -76,3 +77,6 @@ promtail_ts_b: "+02:00"
 # Subnet information for the lustre-network role
 gc_data_subnet: ip-net-site-a
 sh_data_subnet: ip-net-site-b
+
+# set gocryptfs version
+gocryptfs_version: 2.5.2

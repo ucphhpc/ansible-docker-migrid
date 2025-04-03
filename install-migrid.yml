@@ -12,10 +12,11 @@
     - stop_logging
     - umount_encrypt_state
     - migrid_logrotate
-    - migrid_clean
     - migrid_users
+    - migrid_clean
     - copy_overlay_files
     - migrid_baseline
+    - setup_env
     - copy_cert_files
     - configure_lustre
     - connect_lustre

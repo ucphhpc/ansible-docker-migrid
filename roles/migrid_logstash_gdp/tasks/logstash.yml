@@ -11,7 +11,6 @@
   import_tasks:
     file: ../../promtail_migrid/tasks/user.yml
 
-#FIXME: redhat version of getting logstash
 - name: Ensure Elastic keys are available (debian)
   apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
@@ -29,6 +28,14 @@
     state: present
     update_cache: yes
   when: ansible_os_family == "Debian"
+
+# Here we install from uyuni so i will not add any repo first like on ubuntu.
+- name: Install logstash (RedHat)
+  dnf:
+    name: logstash
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "RedHat"
 
 - name: Install logstash-output-loki
   community.general.logstash_plugin:
@@ -64,9 +71,9 @@
     recurse: true
 
 #when touching a file in lustre you cannot set the user or group.
-- name: touch {{migrid_state_directory}}/log/gdp.sincedb
+- name: touch {{migrid_log}}/gdp.sincedb
   file:
-    path: "{{migrid_state_directory}}/log/gdp.sincedb"
+    path: "{{migrid_log}}/gdp.sincedb"
     state: touch
     mode: 0666
 

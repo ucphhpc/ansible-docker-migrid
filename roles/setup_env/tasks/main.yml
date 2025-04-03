@@ -1,0 +1,48 @@
+---
+# This will insert variables into env file as a "pre rendering of variables". 
+# This is to enable that you can bootstrap environments without anything in your state directory.
+#
+# We do not set these variables because they are all set in docker-compose.override.yml but developers are keen on getting variables from .env
+#
+
+- name: set PERSISTENT_ROOT in env file
+  lineinfile:
+    path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    regexp: "^PERSISTENT_ROOT"
+    line: "PERSISTENT_ROOT={{migrid_state_directory}}"
+    insertafter: "^# Anchor for rendered variables"
+
+- name: set VOLATILE_ROOT in env file
+  lineinfile:
+    path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    regexp: "^VOLATILE_ROOT"
+    line: "VOLATILE_ROOT={{migrid_state_directory}}"
+    insertafter: "^# Anchor for rendered variables"
+
+- name: set LOG_ROOT in env file
+  lineinfile:
+    path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    regexp: "^LOG_ROOT"
+    line: "LOG_ROOT={{ migrid_state_directory }}"
+    insertafter: "^# Anchor for rendered variables"
+
+- name: set MIG_SYSTEM_RUN in env file
+  lineinfile:
+    path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    regexp: "^MIG_SYSTEM_RUN"
+    line: "MIG_SYSTEM_RUN={{migrid_state_directory}}/mig_system_run"
+    insertafter: "^# Anchor for rendered variables"
+
+- name: set VGRID_FILES_WRITABLE in env file
+  lineinfile:
+    path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    regexp: "^VGRID_FILES_WRITABLE"
+    line: "VGRID_FILES_WRITABLE={{migrid_state_directory}}/vgrid_files_writable"
+    insertafter: "^# Anchor for rendered variables"
+
+- name: set OPENID_STORE in env file
+  lineinfile:
+    path: "{{ migrid_overlay }}/{{ ansible_hostname }}/env"
+    regexp: "^OPENID_STORE"
+    line: "OPENID_STORE={{migrid_state_directory}}/openid_store"
+    insertafter: "^# Anchor for rendered variables"

@@ -3,6 +3,17 @@
 #build containers, setup the rest for deployment
 # depends on migrid-baseline, startup-encrypt-state
 
+# This is to support that a server can have another server name than the DOMAIN in env file
+- name: find domain for migrid environment
+  shell:
+    cmd: "grep ^DOMAIN= /opt/migrid/docker-migrid/.env | awk -F'=' '{print $2}'"
+  register: results
+
+- name: Set domain
+  set_fact:
+    migrid_domain: "{{results.stdout}}"
+
+
 # ---------------------------------------------------------------
 # This should be a seperate build role
 # ---------------------------------------------------------------
@@ -14,37 +25,16 @@
 # ---------------------------------------------------------------
 
 
-# ---------------------------------------------------------------
-# This should be a seperate populate directories role
-# ---------------------------------------------------------------
-- name: Get infos on container
-  community.docker.docker_container_info:
-    name: migrid
-  register: migrid_container
+- name: Run new docker version
+  import_tasks:
+    file: docker.yml
 
-- name: Check if migrid container exists
-  fail:
-    msg: MiGrid container already exists, cannot continue!
-  when: migrid_container.exists
-
-- name: Running docker-compose up
-  community.docker.docker_compose:
-    profiles: "{{ migrid_start_containers_profiles | default(omit) }}"
-    project_src: "{{ migrid_root }}"
-    build: false
-    recreate: always
-
-- name: pause
-  pause:
-    seconds: 10
-
-- name: Stopping containers
-  community.docker.docker_compose:
-    project_src: "{{ migrid_root }}"
-    build: false
-    state: absent
-    stopped: true
-# ---------------------------------------------------------------
+- name: Changer owner on all top level directories in migrid state directory
+  ansible.builtin.file:
+    path: "{{ migrid_state_directory }}"
+    owner: "{{ migrid_user }}"
+    group: "{{ migrid_user }}"
+    #recurse: true
 
 - name: copy static html files for migrid
   copy:
@@ -57,7 +47,7 @@
 
 - name: Link static html files in wwwpublic
   file:
-    src: "{{ item.file }}-{{ inventory_hostname }}.html"
+    src: "{{ item.file }}-{{ migrid_domain }}.html"
     dest: "{{ migrid_state_directory }}/wwwpublic/{{ item.dest }}"
     state: link
     force: true

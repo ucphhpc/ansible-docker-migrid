@@ -1,4 +1,16 @@
 ---
+
+# fixme: checking for it is half a hack, what about when you want to upgrade it?
+- name: Check if gocryptfs needs to be installed
+  stat:
+    path: "/usr/bin/gocryptfs"
+  register: doinstall
+
+- name: Import install task if needed
+  import_tasks:
+    file: install.yml
+  when: migrid_encrypt_state==true and doinstall.stat.exists == false
+
 # decide if this server has to have an encrypted drive
 - name: Check if gocryptfs.conf already exists on encryption drive
   stat:

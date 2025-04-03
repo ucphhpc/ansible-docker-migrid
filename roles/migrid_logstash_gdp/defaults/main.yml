@@ -2,7 +2,9 @@
 migrid_elastic_release: 8
 
 # the user that has access to r/w on the mds in lustre
-logstash_user: promtail
+# when you mount gocryptfs as root you need root
+#logstash_user: promtail
+logstash_user: root
 
 logstash_config_autoreload: true
 ## logstash_config_autoreload_interval: 3s

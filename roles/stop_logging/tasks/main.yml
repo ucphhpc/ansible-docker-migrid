@@ -1,11 +1,19 @@
 ---
+
+# when running stop_logging at this early stage on a scratch(not installed before) environment then you might encounter they are not installed
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
 - name: stop promtail
   systemd:
     name: promtail
     state: stopped
+  when: ansible_facts['services']['promtail']['status'] | default('not-found') != 'not-found'
 
 - name: stop logstash
   systemd:
     name: logstash
     state: stopped
-  when: migrid_base_type == "sif"
+  when: 
+    - migrid_base_type == "sif"
+    - ansible_facts['services']['logstash']['status'] | default('not-found') != 'not-found'

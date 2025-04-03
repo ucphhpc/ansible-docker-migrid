@@ -77,3 +77,6 @@ promtail_ts_b: "+02:00"
 # Subnet information for the lustre-network role
 gc_data_subnet: ip-net-site-a
 sh_data_subnet: ip-net-site-b
+
+# set gocryptfs version
+gocryptfs_version: 2.5.2

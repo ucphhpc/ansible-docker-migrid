@@ -5,4 +5,5 @@
 # The default example below is taken fron the AU default.
 configure_lustre_lnet_networks:
     - { product_name: "VMware Virtual Platform", net: "tcp1(ens224),tcp2(ens256)" }
+    - { product_name: "Standard PC (i440FX + PIIX, 1996)", net: "tcp1(ens19),tcp2(ens20)" }
     #- { product_name: "PowerEdge xxxx", net: "tcp1(eth1),tcp2(eth2)" }

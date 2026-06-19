@@ -1,0 +1,28 @@
+---
+
+# alloy installation is based on
+# https://github.com/grafana/grafana-ansible-collection/tree/main
+
+- name: Import user create task
+  import_tasks:
+    file: user.yml
+
+- name: Install Alloy (RedHat)
+  dnf:
+    name: "https://github.com/grafana/alloy/releases/download/v{{ alloy_version }}/alloy-{{ alloy_version }}-1.amd64.rpm"
+    state: present
+    disable_gpg_check: true
+  notify: stop-alloy
+  when: ansible_os_family == 'RedHat'
+
+- name: install Alloy (debian)
+  apt:
+    deb: "https://github.com/grafana/alloy/releases/download/v{{ alloy_version }}/alloy-{{ alloy_version }}-1.amd64.deb"
+  notify: stop-alloy
+  when: ansible_os_family == "Debian"
+
+- name: Setup Alloy in disabled state
+  systemd:
+    name: alloy
+    enabled: false
+    state: stopped

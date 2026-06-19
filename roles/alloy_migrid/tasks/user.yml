@@ -1,0 +1,29 @@
+---
+
+#for transition, remove the old promtail user
+# remove at at a later point
+- name: Remove old promtail group
+  group:
+    name: promtail
+    state: absent
+
+- name: Remove old promtail users
+  user:
+    name: promtail
+    state: absent
+
+#user has to exist also on mds lustre server
+- name: Add alloy group
+  group:
+    name: alloy
+    gid: "{{alloy_user_gid}}"
+    state: present
+
+- name: Add alloy users
+  user:
+    name: alloy
+    comment: alloy user
+    uid: "{{alloy_user_uid}}"
+    group: alloy
+    shell: /bin/bash
+    password_lock: true

@@ -1,17 +1,5 @@
 ---
 
-#for transition, remove the old promtail user
-# remove at at a later point
-- name: Remove old promtail group
-  group:
-    name: promtail
-    state: absent
-
-- name: Remove old promtail users
-  user:
-    name: promtail
-    state: absent
-
 #user has to exist also on mds lustre server
 - name: Add alloy group
   group:

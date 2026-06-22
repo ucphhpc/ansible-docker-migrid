@@ -27,11 +27,19 @@
     dest: /etc/alloy/config.alloy
   notify: stop-alloy
 
-- name: Update CUSTOM_ARGS for alloy
+- name: Update CUSTOM_ARGS for alloy (Redhat)
   lineinfile:
     path: /etc/sysconfig/alloy
     regexp: "^CUSTOM_ARGS"
     line: "CUSTOM_ARGS=\"--server.http.listen-addr={{ ansible_facts[promtail_loki_net]['ipv4']['address'] }}:3102\""
+  when: ansible_os_family == 'RedHat'
+
+- name: Update CUSTOM_ARGS for alloy (Debian)
+  lineinfile:
+    path: /etc/default/alloy
+    regexp: "^CUSTOM_ARGS"
+    line: "CUSTOM_ARGS=\"--server.http.listen-addr={{ ansible_facts[promtail_loki_net]['ipv4']['address'] }}:3102\""
+  when: ansible_os_family == "Debian"
 
 - name: Setup Alloy in disabled state
   systemd:

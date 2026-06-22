@@ -42,12 +42,12 @@ loki.process "erda" {
 
                 stage.template {
                         source   = "timestamp"
-                        template = "{{ "{{ Replace .Value \",\" \".\" 1 }}" }}"
+                        template = \"{{ "{{ Replace .Value \",\" \".\" 1 }}" }}\"
                 }
 
                 stage.template {
                         source   = "timestamp"
-                        template = "{{ "{{ Replace .Value \" \" \"T\" 1 }}"}}{{alloy_ts_a}}"
+                        template = \"{{ "{{ Replace .Value \" \" \"T\" 1 }}"}}{{alloy_ts_a}}\"
                 }
 
                 stage.timestamp {
@@ -71,12 +71,12 @@ loki.process "erda" {
 
                 stage.template {
                         source   = "timestamp"
-                        template = "{{ "{{ Replace .Value \",\" \".\" 1 }}" }}"
+                        template = \"{{ "{{ Replace .Value \",\" \".\" 1 }}" }}\"
                 }
 
                 stage.template {
                         source   = "timestamp"
-                        template = "{{ "{{ Replace .Value \" \" \"T\" 1 }}"}}{{alloy_ts_b}}"
+                        template = \"{{ "{{ Replace .Value \" \" \"T\" 1 }}"}}{{alloy_ts_b}}\"
                 }
 
                 stage.timestamp {
@@ -100,12 +100,12 @@ loki.process "erda" {
 
                 stage.template {
                         source   = "timestamp"
-                        template = "{{ "{{ Replace .Value \",\" \".\" 1 }}" }}"
+                        template = \"{{ "{{ Replace .Value \",\" \".\" 1 }}" }}\"
                 }
 
                 stage.template {
                         source   = "timestamp"
-                        template = "{{ "{{ Replace .Value \" \" \"T\" 1 }}"}}{{alloy_ts_b}}"
+                        template = \"{{ "{{ Replace .Value \" \" \"T\" 1 }}"}}{{alloy_ts_b}}\"
                 }
 
                 stage.timestamp {

@@ -31,7 +31,7 @@
   lineinfile:
     path: /etc/sysconfig/alloy
     regexp: "^CUSTOM_ARGS"
-    line: 'CUSTOM_ARGS="--server.http.listen-addr={{ ansible_facts[promtail_loki_net]['ipv4']['address'] }}:3102"'
+    line: "CUSTOM_ARGS=\"--server.http.listen-addr={{ ansible_facts[promtail_loki_net]['ipv4']['address'] }}:3102\""
 
 - name: Setup Alloy in disabled state
   systemd:

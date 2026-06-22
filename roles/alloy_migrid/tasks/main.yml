@@ -25,7 +25,7 @@
   template:
     src: config.alloy.j2
     dest: /etc/alloy/config.alloy
-  notify: stop-promtail
+  notify: stop-alloy
 
 - name: Update CUSTOM_ARGS for alloy
   lineinfile:

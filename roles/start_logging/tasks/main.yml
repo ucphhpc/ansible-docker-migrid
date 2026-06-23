@@ -1,7 +1,7 @@
 ---
-- name: start promtail
+- name: start alloy
   systemd:
-    name: promtail
+    name: alloy
     state: started
 
 - name: start logstash

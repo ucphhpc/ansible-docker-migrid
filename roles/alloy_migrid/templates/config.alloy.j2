@@ -1,0 +1,139 @@
+loki.process "erda" {
+        forward_to = [loki.write.default.receiver]
+
+        stage.limit {
+                rate  = 8888
+                burst = 8888
+        }
+
+        stage.truncate {
+                rule {
+                        limit = "8KiB"
+                }
+        }
+
+        stage.match {
+                selector = "{job=\"erdalogs\"}"
+
+                stage.regex {
+                        expression = "{{migrid_log}}/((gdp)|(?P<service>\\S+?)).log"
+                        source     = "filename"
+                }
+
+                stage.labels {
+                        values = {
+                                service = null,
+                        }
+                }
+        }
+
+        stage.match {
+                selector = "{job=\"erdalogs\", service!=\"mig\", service!=\"gdp\" }"
+
+                stage.regex {
+                        expression = "^(?P<timestamp>\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}[\\.,]\\d{3}) (?P<logType>[A-Za-z]+)"
+                }
+
+                stage.labels {
+                        values = {
+                                logType = null,
+                        }
+                }
+
+                stage.template {
+                        source   = "timestamp"
+                        template = "{{ '{{ Replace .Value \",\" \".\" 1 }}'|replace('"', '\\"') }}"
+                }
+
+                stage.template {
+                        source   = "timestamp"
+                        template = "{{ '{{ Replace .Value \" \" \"T\" 1 }}'|replace('"', '\\"') }}{{alloy_ts_a}}"
+                }
+
+                stage.timestamp {
+                        source = "timestamp"
+                        format = "RFC3339Nano"
+                }
+        }
+
+        stage.match {
+                selector = "{job=\"erdalogs\", service=\"mig\" }"
+
+                stage.regex {
+                        expression = "^(?P<timestamp>\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}[\\.,]\\d{3}) (?P<logType>[A-Za-z]+)"
+                }
+
+                stage.labels {
+                        values = {
+                                logType = null,
+                        }
+                }
+
+                stage.template {
+                        source   = "timestamp"
+                        template = "{{ '{{ Replace .Value \",\" \".\" 1 }}'|replace('"', '\\"') }}"
+                }
+
+                stage.template {
+                        source   = "timestamp"
+                        template = "{{ '{{ Replace .Value \" \" \"T\" 1 }}'|replace('"', '\\"') }}{{alloy_ts_b}}"
+                }
+
+                stage.timestamp {
+                        source = "timestamp"
+                        format = "RFC3339Nano"
+                }
+        }
+
+        stage.match {
+                selector = "{job=\"erdalogs\", service=\"gdp\" }"
+
+                stage.regex {
+                        expression = "^\\w{3}\\s+\\d+\\s\\d{2}:\\d{2}:\\d{2}\\s[\\w-]+\\s[\\w-]+\\[\\d+\\]:\\s(?P<timestamp>\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}[\\.,]\\d{3}) (?P<logType>[A-Za-z]+)"
+                }
+
+                stage.labels {
+                        values = {
+                                logType = null,
+                        }
+                }
+
+                stage.template {
+                        source   = "timestamp"
+                        template = "{{ '{{ Replace .Value \",\" \".\" 1 }}'|replace('"', '\\"') }}"
+                }
+
+                stage.template {
+                        source   = "timestamp"
+                        template = "{{ '{{ Replace .Value \" \" \"T\" 1 }}'|replace('"', '\\"') }}{{alloy_ts_b}}"
+                }
+
+                stage.timestamp {
+                        source = "timestamp"
+                        format = "RFC3339Nano"
+                }
+        }
+}
+
+loki.source.file "erda" {
+        targets = [{
+                __address__ = "localhost",
+                __path__    = "{{migrid_log}}/*.log",
+                host        = "{{ansible_hostname}}",
+                job         = "erdalogs",
+        }]
+        forward_to = [loki.process.erda.receiver]
+
+        file_match {
+                enabled = true
+        }
+        legacy_positions_file = "/var/log/promtail/promtail_positions.yaml"
+}
+
+loki.write "default" {
+        endpoint {
+                url                 = "http://{{alloy_loki_server}}:3100/loki/api/v1/push"
+                max_backoff_retries = 8888
+        }
+        external_labels = {}
+}

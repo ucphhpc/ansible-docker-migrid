@@ -1,0 +1,7 @@
+---
+# handlers file for alloy
+- name: stop-alloy
+  ansible.builtin.systemd:
+    name: alloy.service
+    state: stopped
+    daemon_reload: true

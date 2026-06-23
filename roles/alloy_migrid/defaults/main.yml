@@ -1,0 +1,4 @@
+---
+#uid and gid for user that has access mds in lustre
+alloy_user_gid: 1399
+alloy_user_uid: 1399

@@ -4,12 +4,6 @@
 # requires:
 #   setup_vars
 #   community.general (.logstash_plugin) version 7.5.0 or greater
-#   promtail_migrid   requires that user that you defined for logscraping on lustre mds is defined on server
-
-#import promtail user task to ensure the user used here is available (reusing the promtail user for lustre access)
-- name: Import user create task
-  import_tasks:
-    file: ../../promtail_migrid/tasks/user.yml
 
 - name: Ensure Elastic keys are available (debian)
   apt_key:

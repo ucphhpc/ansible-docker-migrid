@@ -1,0 +1,57 @@
+---
+
+# alloy installation is based on
+# https://github.com/grafana/grafana-ansible-collection/tree/main
+
+- name: Import user create task
+  import_tasks:
+    file: user.yml
+
+# promtail name is kept to ensure transistion from old promtail to alloy
+- name: Create position directory
+  file:
+    path: /var/log/promtail
+    owner: alloy
+    group: alloy
+    mode: "0755"
+    state: directory
+
+- name: Install Alloy (RedHat)
+  dnf:
+    name: "https://github.com/grafana/alloy/releases/download/v{{ alloy_version }}/alloy-{{ alloy_version }}-1.amd64.rpm"
+    state: present
+    disable_gpg_check: true
+  notify: stop-alloy
+  when: ansible_os_family == 'RedHat'
+
+- name: install Alloy (debian)
+  apt:
+    deb: "https://github.com/grafana/alloy/releases/download/v{{ alloy_version }}/alloy-{{ alloy_version }}-1.amd64.deb"
+  notify: stop-alloy
+  when: ansible_os_family == "Debian"
+
+- name: Copy configuration file
+  template:
+    src: config.alloy.j2
+    dest: /etc/alloy/config.alloy
+  notify: stop-alloy
+
+- name: Update CUSTOM_ARGS for alloy (Redhat)
+  lineinfile:
+    path: /etc/sysconfig/alloy
+    regexp: "^CUSTOM_ARGS"
+    line: "CUSTOM_ARGS=\"--server.http.listen-addr={{ ansible_facts[alloy_loki_net]['ipv4']['address'] }}:3102\""
+  when: ansible_os_family == 'RedHat'
+
+- name: Update CUSTOM_ARGS for alloy (Debian)
+  lineinfile:
+    path: /etc/default/alloy
+    regexp: "^CUSTOM_ARGS"
+    line: "CUSTOM_ARGS=\"--server.http.listen-addr={{ ansible_facts[alloy_loki_net]['ipv4']['address'] }}:3102\""
+  when: ansible_os_family == "Debian"
+
+- name: Setup Alloy in disabled state
+  systemd:
+    name: alloy
+    enabled: false
+    state: stopped

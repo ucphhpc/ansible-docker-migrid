@@ -5,9 +5,9 @@
 # - name: Populate service facts
 #   ansible.builtin.service_facts:
 
-- name: stop promtail
+- name: stop alloy
   systemd:
-    name: promtail
+    name: alloy
     state: stopped
   # when: ansible_facts['services']['promtail']['status'] | default('not-found') != 'not-found'
 

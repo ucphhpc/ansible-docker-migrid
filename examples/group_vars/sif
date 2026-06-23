@@ -16,5 +16,7 @@ migrid_pdf_files:
     - { file: "myfileB.pdf" }
 
 #to solve time zone problems in promtail for the log files, we have the below, see config.yml.j2 for promtail-migrid
-promtail_ts_a: "+00:00"
-promtail_ts_b: "+02:00"
+# promtail_ts_a: "+00:00"
+# promtail_ts_b: "+02:00"
+alloy_ts_a: "+02:00"
+alloy_ts_b: "+02:00"

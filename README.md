@@ -45,7 +45,7 @@ Another way is to use collections in the playbook, like this example of start-mi
   roles:
     - setup_vars
     - startup_encrypt_state
-    - start_promtail
+    - start_logging
     - start_containers    
 ```
 

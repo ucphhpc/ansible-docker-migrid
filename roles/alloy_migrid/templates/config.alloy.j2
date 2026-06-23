@@ -132,7 +132,7 @@ loki.source.file "erda" {
 
 loki.write "default" {
         endpoint {
-                url                 = "http://{{promtail_loki_server}}:3100/loki/api/v1/push"
+                url                 = "http://{{alloy_loki_server}}:3100/loki/api/v1/push"
                 max_backoff_retries = 8888
         }
         external_labels = {}

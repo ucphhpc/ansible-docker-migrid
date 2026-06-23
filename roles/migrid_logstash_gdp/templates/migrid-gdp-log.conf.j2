@@ -26,7 +26,7 @@ filter {
 
 output {
   loki {
-    url => "http://{{promtail_loki_server}}:3100/loki/api/v1/push"
+    url => "http://{{alloy_loki_server}}:3100/loki/api/v1/push"
     retries => 8888
     insecure_skip_verify => true
   }

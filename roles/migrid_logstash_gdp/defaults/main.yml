@@ -3,7 +3,6 @@ migrid_elastic_release: 8
 
 # the user that has access to r/w on the mds in lustre
 # when you mount gocryptfs as root you need root
-#logstash_user: promtail
 logstash_user: root
 
 logstash_config_autoreload: true
@@ -12,8 +11,3 @@ logstash_config_path_data: /var/lib/logstash
 logstash_config_path_logs: /var/log/logstash
 ## logstash_http_host: "127.0.0.1"
 ## logstash_http_port: 9600-9700
-
-#uid and gid for user that has access mds in lustre
-#used in promtail_migrid/tasks/user.yml
-promtail_user_gid: 1399
-promtail_user_uid: 1399

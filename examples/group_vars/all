@@ -65,13 +65,19 @@ migrid_lustre_mount:
 # \____/\___/|_|\_\_|
 
 #promtail_loki_server: 
-promtail_loki_server: ip-loki-server
+# promtail_loki_server: ip-loki-server
 # this sets the network card on vm servers where the above ip-net-site-a net is 
-promtail_loki_net: loki-net-name
-promtail_version: 2.8.2
+# promtail_loki_net: loki-net-name
+# promtail_version: 2.8.2
 #to solve time zone problems in promtail for the log files, we have the below, see config.yml.j2 for promtail-migrid
-promtail_ts_a: "+02:00"
-promtail_ts_b: "+02:00"
+# promtail_ts_a: "+02:00"
+# promtail_ts_b: "+02:00"
+#alloy
+alloy_version: 1.17.0
+alloy_loki_server: ip-loki-server
+alloy_loki_net: loki-net-name
+alloy_ts_a: "+02:00"
+alloy_ts_b: "+02:00"
 
 
 # Subnet information for the lustre-network role
